@@ -8,12 +8,14 @@
     "vite": "^5.2.8"
   },
   "dependencies": {
+    "ol": "^9.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
   "scripts": {
     "dev": "vite",
     "test": "prettier --check . && tsc --noEmit",
-    "prepare": "husky"
+    "prepare": "husky",
+    "build": "npm test && vite build"
   }
 }
