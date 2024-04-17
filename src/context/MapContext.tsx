@@ -11,27 +11,28 @@ useGeographic();
 export const map = new Map({ view: new View({ center: [10, 59], zoom: 8 }) });
 
 const source = new VectorSource({});
-export const drawingLayer = new VectorLayer({source});
+export const drawingLayer = new VectorLayer({ source });
 
 export const MapContext = React.createContext<{
-    map: Map;
-    setBaseLayer: (baseLayer: Layer) => void;
-    vectorLayers: Layer[];
-    setVectorLayers: Dispatch<SetStateAction<Layer[]>>;
-    /*
+  map: Map;
+  setBaseLayer: (baseLayer: Layer) => void;
+  vectorLayers: Layer[];
+  setVectorLayers: Dispatch<SetStateAction<Layer[]>>;
+  drawingLayer: VectorLayer<VectorSource>;
+  /*
     clickedKommune: Feature | undefined;
     setClickedKommune: Dispatch<SetStateAction<Feature | undefined>>;
 
      */
-
 }>({
-    map,
+  map,
 
-    setBaseLayer: () => {},
+  setBaseLayer: () => {},
 
-    vectorLayers: [],
-    setVectorLayers: () => {},
-    /*
+  vectorLayers: [],
+  setVectorLayers: () => {},
+  drawingLayer,
+  /*
  clickedKommune: undefined,
  setClickedKommune: () => {},
 

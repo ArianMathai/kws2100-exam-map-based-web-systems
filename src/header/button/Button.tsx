@@ -1,13 +1,7 @@
-import React from "react"
+import React from "react";
 
-function Button ({drawType}:{drawType:string}){
-
-    return (
-
-        <button>{drawType}</button>
-
-    )
-
+function Button({ drawType }: { drawType: string }) {
+  return <button>{drawType}</button>;
 }
 
-export default Button
+export default Button;

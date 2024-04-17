@@ -11,75 +11,75 @@ const ortoPhotoLayer = new TileLayer();
 
 // function to parse fetched information
 async function loadWmtsSource(
-    url: string,
-    config: {
-        layer: string;
-        matrixSet: string;
-    },
+  url: string,
+  config: {
+    layer: string;
+    matrixSet: string;
+  },
 ) {
-    const res = await fetch(url);
-    const text = await res.text();
-    const result = await parser.read(text);
-    const options = optionsFromCapabilities(result, config);
-    return new WMTS(options!);
+  const res = await fetch(url);
+  const text = await res.text();
+  const result = await parser.read(text);
+  const options = optionsFromCapabilities(result, config);
+  return new WMTS(options!);
 }
 
 async function loadFlyfotoLayer() {
-    return await loadWmtsSource(
-        "https://opencache.statkart.no/gatekeeper/gk/gk.open_nib_web_mercator_wmts_v2?SERVICE=WMTS&REQUEST=GetCapabilities",
-        { layer: "Nibcache_web_mercator_v2", matrixSet: "default028mm" },
-    );
+  return await loadWmtsSource(
+    "https://opencache.statkart.no/gatekeeper/gk/gk.open_nib_web_mercator_wmts_v2?SERVICE=WMTS&REQUEST=GetCapabilities",
+    { layer: "Nibcache_web_mercator_v2", matrixSet: "default028mm" },
+  );
 }
 
 const BaseLayerDropdown = () => {
-    const baseLayerOptions = [
-        {
-            id: "osm",
-            name: "Open Street Map",
-            layer: new TileLayer({ source: new OSM() }),
-        },
-        {
-            id: "stadia",
-            name: "Stadia",
-            layer: new TileLayer({ source: new StadiaMaps({ layer: "outdoors" }) }),
-        },
-        {
-            id: "ortoPhoto",
-            name: "Flyfoto",
-            layer: ortoPhotoLayer,
-        },
-    ];
-    const [selectedBaseLayer, setSelectedBaseLayer] = useState(
-        baseLayerOptions[0],
-    );
-    const { setBaseLayer } = useContext(MapContext);
+  const baseLayerOptions = [
+    {
+      id: "osm",
+      name: "Open Street Map",
+      layer: new TileLayer({ source: new OSM() }),
+    },
+    {
+      id: "stadia",
+      name: "Stadia",
+      layer: new TileLayer({ source: new StadiaMaps({ layer: "outdoors" }) }),
+    },
+    {
+      id: "ortoPhoto",
+      name: "Flyfoto",
+      layer: ortoPhotoLayer,
+    },
+  ];
+  const [selectedBaseLayer, setSelectedBaseLayer] = useState(
+    baseLayerOptions[0],
+  );
+  const { setBaseLayer } = useContext(MapContext);
 
-    useEffect(() => {
-        loadFlyfotoLayer().then((source) => ortoPhotoLayer.setSource(source));
-    }, []);
+  useEffect(() => {
+    loadFlyfotoLayer().then((source) => ortoPhotoLayer.setSource(source));
+  }, []);
 
-    useEffect(() => {
-        console.log("selected base layer = ", selectedBaseLayer.name);
-        setBaseLayer(selectedBaseLayer.layer);
-    }, [selectedBaseLayer]);
+  useEffect(() => {
+    console.log("selected base layer = ", selectedBaseLayer.name);
+    setBaseLayer(selectedBaseLayer.layer);
+  }, [selectedBaseLayer]);
 
-    return (
-        <select
-            className={"baseLayer_select"}
-            onChange={(e) =>
-                setSelectedBaseLayer(
-                    baseLayerOptions.find((layer) => layer.id === e.target.value)!,
-                )
-            }
-            value={selectedBaseLayer.id}
-        >
-            {baseLayerOptions.map(({ id, name }) => (
-                <option value={id} key={id}>
-                    {name}
-                </option>
-            ))}
-        </select>
-    );
+  return (
+    <select
+      className={"baseLayer_select"}
+      onChange={(e) =>
+        setSelectedBaseLayer(
+          baseLayerOptions.find((layer) => layer.id === e.target.value)!,
+        )
+      }
+      value={selectedBaseLayer.id}
+    >
+      {baseLayerOptions.map(({ id, name }) => (
+        <option value={id} key={id}>
+          {name}
+        </option>
+      ))}
+    </select>
+  );
 };
 
 export default BaseLayerDropdown;
