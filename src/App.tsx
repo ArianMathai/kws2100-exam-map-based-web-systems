@@ -84,17 +84,33 @@ function App() {
       long: 10,
       lat: 60,
     },
+    {
+      long: 9,
+      lat: 60,
+    },
+    {
+      long: 8,
+      lat: 60,
+    },
+    {
+      long: 11,
+      lat: 60,
+    },
+    {
+      long: 12,
+      lat: 60,
+    },
   ];
 
   const vehicleSource = useMemo(() => {
     console.log("TRIGGERED!");
     const features = trainArray.map((train) => {
-      console.log("Lat: " + train.location.latitude);
-      console.log("Long: " + train.location.longitude);
       return new Feature(
-        new Point([train.location.latitude, train.location.longitude]),
+        new Point([train.location.longitude, train.location.latitude]),
       );
     });
+
+    console.log("Number of features:", features.length);
 
     return new VectorSource({
       features: features,
@@ -102,6 +118,7 @@ function App() {
   }, [trainArray]);
 
   const vehicleLayer = useMemo(() => {
+    console.log("Layer recreated!");
     return new VectorLayer({
       source: vehicleSource,
     });
@@ -111,12 +128,12 @@ function App() {
 
   const mapRef = useRef() as MutableRefObject<HTMLDivElement>;
 
-  const [vectorLayers, setVectorLayers] = useState<Layer[]>([
-    drawingLayer,
-    vehicleLayer,
-  ]);
+  const [vectorLayers, setVectorLayers] = useState<Layer[]>([drawingLayer]);
 
-  const allLayers = useMemo(() => [baseLayer, ...vectorLayers], [baseLayer]);
+  const allLayers = useMemo(
+    () => [baseLayer, ...vectorLayers, vehicleLayer],
+    [baseLayer, vectorLayers, vehicleLayer],
+  );
 
   useEffect(() => {
     map.setTarget(mapRef.current);
@@ -158,18 +175,33 @@ function App() {
           if (message.data.vehicles.length > 0) {
             const receivedVehicles: Vehicle[] = message.data.vehicles;
             receivedVehicles.forEach((receivedVehicle) => {
+              console.log("Received Vehicle:", receivedVehicle);
               setTrainArray((prevTrainArray) => {
                 if (
                   !prevTrainArray.some(
                     (train) => train.vehicleId === receivedVehicle.vehicleId,
                   )
                 ) {
-                  return [...prevTrainArray, receivedVehicle]; // Add the vehicle to the array
+                  // Add the vehicle to the array
+                  return [...prevTrainArray, receivedVehicle];
                 } else {
                   console.log(
                     `Vehicle with ID ${receivedVehicle.vehicleId} already exists in trainArray`,
                   );
-                  return prevTrainArray; // Return the previous array unchanged
+                  // Update the location of the existing vehicle
+                  return prevTrainArray.map((train) => {
+                    if (train.vehicleId === receivedVehicle.vehicleId) {
+                      return {
+                        ...train,
+                        location: {
+                          latitude: receivedVehicle.location.latitude,
+                          longitude: receivedVehicle.location.longitude,
+                        },
+                      };
+                    } else {
+                      return train;
+                    }
+                  });
                 }
               });
             });
