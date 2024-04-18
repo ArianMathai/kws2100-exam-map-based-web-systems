@@ -74,9 +74,8 @@ function App() {
     { value: "VOT", label: "Vestfold og Telemark" },
     { value: "VYB", label: "Vy Buss (SE)" },
     { value: "VYG", label: "Vy Group" },
-    { value: "VYX", label: "Vy Express" }
+    { value: "VYX", label: "Vy Express" },
   ];
-
 
   const trainLayer = useMemo(() => {
     return new VectorLayer({
