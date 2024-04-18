@@ -19,6 +19,9 @@ import TrainStationsCheckbox from "./trains/TrainStationsCheckbox";
 import { useTrainData } from "./trains/useTrainData";
 import { useBusData } from "./Busses/useBusData";
 import Dropdown from "./Dropdown";
+import { OccupancyStatus, Vehicle } from "./trains/trainTypes";
+import { FeatureLike } from "ol/Feature";
+import { MapBrowserEvent } from "ol";
 
 function App() {
   const [baseLayer, setBaseLayer] = useState<Layer>(
@@ -37,6 +40,10 @@ function App() {
 
   const [vectorLayers, setVectorLayers] = useState<Layer[]>([drawingLayer]);
 
+  const [clickedFeature, setClickedFeature] = useState<Vehicle | undefined>(
+    undefined,
+  );
+
   const dropdownOptions = [
     { value: "default", label: "Choose Bus Company" },
     { value: "VYX", label: "Vy Express" },
@@ -46,14 +53,12 @@ function App() {
   ];
 
   const trainLayer = useMemo(() => {
-    console.log("Layer recreated!");
     return new VectorLayer({
       source: trainSource,
     });
   }, [trainSource]);
 
   const busLayer = useMemo(() => {
-    console.log("Layer recreated!");
     return new VectorLayer({
       source: busSource,
     });
@@ -68,6 +73,47 @@ function App() {
     setSelectedOption(newValue);
   };
 
+  function handlePointerClick(e: MapBrowserEvent<PointerEvent>) {
+    const features: FeatureLike[] = [];
+
+    map.forEachFeatureAtPixel(e.pixel, (f) => features.push(f), {
+      layerFilter: (l) => l === busLayer,
+      hitTolerance: 10,
+    });
+
+    console.log(features.length);
+
+    if (features.length === 1) {
+      const vehicleFeature = features[0] as FeatureLike;
+      const vehicleProperties = vehicleFeature.getProperties();
+      const clickedVehicle: {
+        lastUpdated: any;
+        delay: number;
+        line: any;
+        location: any;
+        vehicleId: any;
+        originName: string;
+        inCongestion: boolean;
+        destinationName: string;
+        occupancy: OccupancyStatus;
+      } = {
+        line: vehicleProperties.line,
+        vehicleId: vehicleProperties.vehicleId,
+        delay: vehicleProperties.delay,
+        lastUpdated: vehicleProperties.lastUpdated,
+        location: vehicleProperties.location,
+        originName: vehicleProperties.originName,
+        inCongestion: vehicleProperties.inCongestion,
+        destinationName: vehicleProperties.destinationName,
+        occupancy: vehicleProperties.occupancy,
+      };
+      // @ts-ignore
+      setClickedFeature(clickedVehicle);
+    } else {
+      setClickedFeature(undefined);
+    }
+  }
+
   useEffect(() => {
     map.setTarget(mapRef.current);
   }, []);
@@ -75,6 +121,14 @@ function App() {
   useEffect(() => {
     map.setLayers(allLayers);
   }, [allLayers]);
+
+  useEffect(() => {
+    if (busLayer) map.on("click", handlePointerClick);
+
+    return () => {
+      map.un("click", handlePointerClick);
+    };
+  }, [busLayer]);
 
   return (
     <MapContext.Provider
@@ -96,7 +150,22 @@ function App() {
           <TrainStationsCheckbox />
         </nav>
       </header>
-      <div ref={mapRef}></div>
+      <main>
+        <div ref={mapRef}></div>
+        {clickedFeature ? (
+          <div className={"clickedFeature"}>
+            <p>From: {clickedFeature.originName}</p>
+            <p>To: {clickedFeature.destinationName}</p>
+            <p>
+              Delay?{" "}
+              {clickedFeature.delay > 0
+                ? `Yeah, sorry, ${clickedFeature.delay} seconds`
+                : "No. I'm speeding!"}
+            </p>
+            <p>In Congestion? {clickedFeature.inCongestion ? "Yes" : "No"}</p>
+          </div>
+        ) : null}
+      </main>
     </MapContext.Provider>
   );
 }

@@ -34,6 +34,11 @@ export function useBusData(busCompany: string) {
                             }
                             delay
                             vehicleId
+                            destinationName
+                            inCongestion
+                            originName
+                            occupancy
+                         
                         }
                     }`,
           });
@@ -76,9 +81,7 @@ export function useBusData(busCompany: string) {
           }
         };
 
-        ws.onclose = () => {
-          console.log("WebSocket disconnected. Attempting to reconnect...");
-        };
+        ws.onclose = () => {};
 
         ws.onerror = (error) => {
           console.error("WebSocket error:", error);
@@ -109,7 +112,14 @@ export function useBusData(busCompany: string) {
       feature.setProperties({
         id: bus.vehicleId,
         delay: bus.delay,
+        lastUpdated: bus.lastUpdated,
+        location: bus.location,
+        destinationName: bus.destinationName,
+        inCongestion: bus.inCongestion,
+        originName: bus.originName,
+        occupancy: bus.occupancy,
       });
+
       return feature;
     });
 

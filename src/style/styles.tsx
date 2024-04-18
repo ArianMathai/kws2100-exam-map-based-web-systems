@@ -37,8 +37,6 @@ export function busStyle(f: FeatureLike, resolution: number) {
 
   const bus = busFeature.getProperties();
 
-  console.log("DELAY: " + bus.delay);
-
   return [
     // Style for the icon
     new Style({
@@ -65,8 +63,6 @@ export function trainStyle(f: FeatureLike, resolution: number) {
 
   // Check the delay of the train
   const train = trainFeature.getProperties();
-
-  console.log("DELAY: " + train.delay);
 
   return [
     // Style for the icon

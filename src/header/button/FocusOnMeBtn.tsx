@@ -9,7 +9,6 @@ function FocusOnMeBtn() {
   function handleLoadCoords() {
     navigator.geolocation.getCurrentPosition((pos) => {
       const { latitude, longitude } = pos.coords;
-      console.log(pos.coords);
       setLong(longitude);
       setLat(latitude);
     });

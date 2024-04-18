@@ -41,20 +41,14 @@ export function useTrainData() {
           if (message.data.vehicles.length > 0) {
             const receivedVehicles: Vehicle[] = message.data.vehicles;
             receivedVehicles.forEach((receivedVehicle) => {
-              console.log("Received Vehicle:", receivedVehicle);
               setTrainArray((prevTrainArray) => {
                 if (
                   !prevTrainArray.some(
                     (train) => train.vehicleId === receivedVehicle.vehicleId,
                   )
                 ) {
-                  // Add the vehicle to the array
                   return [...prevTrainArray, receivedVehicle];
                 } else {
-                  console.log(
-                    `Vehicle with ID ${receivedVehicle.vehicleId} already exists in trainArray`,
-                  );
-                  // Update the location of the existing vehicle
                   return prevTrainArray.map((train) => {
                     if (train.vehicleId === receivedVehicle.vehicleId) {
                       return {
@@ -76,7 +70,6 @@ export function useTrainData() {
       };
 
       ws.onclose = () => {
-        console.log("WebSocket disconnected. Attempting to reconnect...");
         setTimeout(() => {
           connectWebSocket();
         }, 6000);

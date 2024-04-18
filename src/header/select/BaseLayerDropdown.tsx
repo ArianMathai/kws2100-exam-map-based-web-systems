@@ -61,7 +61,6 @@ const BaseLayerDropdown = () => {
   }, []);
 
   useEffect(() => {
-    console.log("selected base layer = ", selectedBaseLayer.name);
     setBaseLayer(selectedBaseLayer.layer);
   }, [selectedBaseLayer]);
 
