@@ -195,9 +195,9 @@ function App() {
           </div>
         ) : null}
         {showMessage && (
-            <div className={"showInfo"}>
+          <div className={"showInfo"}>
             <p>You can click on buses to see if they are delayed.</p>
-            </div>
+          </div>
         )}
       </main>
     </MapContext.Provider>
