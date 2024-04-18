@@ -1,6 +1,6 @@
 import { FeatureLike } from "ol/Feature";
 import { Circle, Fill, Icon, Stroke, Style } from "ol/style";
-import {VehicleFeatures} from "../trains/trainTypes";
+import { VehicleFeatures } from "../trains/trainTypes";
 
 export function trainStationStyle(f: FeatureLike, resolution: number) {
   const radius = Math.min(6000 / resolution, 20);
@@ -88,4 +88,3 @@ export function trainStyle(f: FeatureLike, resolution: number) {
     }),
   ];
 }
-
