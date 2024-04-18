@@ -49,8 +49,34 @@ function App() {
     { value: "VYX", label: "Vy Express" },
     { value: "VOT", label: "Vestfold og Telemark" },
     { value: "SKY", label: "Vestland (Skyss)" },
-    // Add more options as needed
+    { value: "AKT", label: "Agder (AKT)" },
+    { value: "ATB", label: "Trøndelag (AtB)" },
+    { value: "AVI", label: "Avinor" },
+    { value: "BNR", label: "Vy/Flytoget/Go-Ahead/SJ Nord (via Bane NOR)" },
+    { value: "BRA", label: "Viken (Brakar)" },
+    { value: "FIN", label: "Troms og Finnmark (Snelandia)" },
+    { value: "FLT", label: "Flytoget" },
+    { value: "GJB", label: "Vy (formerly NSB) Gjøvikbanen" },
+    { value: "GOA", label: "Go-Ahead" },
+    { value: "INN", label: "Innlandet (Innlandstrafikk)" },
+    { value: "KOL", label: "Rogaland (Kolumbus)" },
+    { value: "MOR", label: "Møre og Romsdal (Fram)" },
+    { value: "NBU", label: "Connect Bus Flybuss" },
+    { value: "NOR", label: "Nordland fylkeskommune" },
+    { value: "NSB", label: "Vy" },
+    { value: "OST", label: "Viken (Østfold kollektivtrafikk)" },
+    { value: "RUT", label: "Oslo region (Ruter)" },
+    { value: "SJN", label: "SJ Nord" },
+    { value: "SOF", label: "Vestland (Kringom)" },
+    { value: "TEL", label: "Vestfold og Telemark (Farte)" },
+    { value: "TRO", label: "Troms og Finnmark (Troms fylkestrafikk)" },
+    { value: "VKT", label: "Vestfold og Telemark (VKT)" },
+    { value: "VOT", label: "Vestfold og Telemark" },
+    { value: "VYB", label: "Vy Buss (SE)" },
+    { value: "VYG", label: "Vy Group" },
+    { value: "VYX", label: "Vy Express" }
   ];
+
 
   const trainLayer = useMemo(() => {
     return new VectorLayer({
@@ -137,8 +163,6 @@ function App() {
       <header>
         <nav>
           <DrawCircleButton />
-          <Button drawType={"Symbol1"} />
-          <Button drawType={"Symbol2"} />
           <DrawTrainStationButton />
           <FocusOnMeBtn />
           <BaseLayerDropdown />

@@ -29,6 +29,8 @@ nav {
   display: flex;
   flex-wrap: wrap;
   gap: 0.25em 1.5em;
+  justify-content: space-between;
+  align-items: center;
 }
 
 nav {
