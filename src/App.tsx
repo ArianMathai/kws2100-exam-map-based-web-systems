@@ -22,6 +22,7 @@ import { Point } from "ol/geom";
 import { Circle, Fill, Icon, Stroke, Style } from "ol/style";
 import CircleStyle from "ol/style/Circle";
 import { FeatureLike } from "ol/Feature";
+import TrainStationsCheckbox from "./trains/TrainStationsCheckbox";
 
 interface coordinates {
   latitude: number;
@@ -249,6 +250,7 @@ function App() {
           <DrawTrainStationButton />
           <FocusOnMeBtn />
           <OptionPicker />
+          <TrainStationsCheckbox />
         </nav>
       </header>
       <div ref={mapRef}></div>
