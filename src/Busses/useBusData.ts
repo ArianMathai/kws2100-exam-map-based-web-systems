@@ -118,5 +118,5 @@ export function useBusData(busCompany: string) {
     });
   }, [busArray]);
 
-  return { busArray, setBussArray: setBusArray, busSource };
+  return { busArray, setBusArray, busSource };
 }

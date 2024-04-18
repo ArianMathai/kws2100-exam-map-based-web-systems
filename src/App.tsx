@@ -1,6 +1,5 @@
 import React, {
   MutableRefObject,
-  useContext,
   useEffect,
   useMemo,
   useRef,
@@ -30,7 +29,7 @@ function App() {
 
   const [selectedOption, setSelectedOption] = useState("");
 
-  const { vehicleSource } = useTrainData();
+  const { trainSource } = useTrainData();
 
   const { busSource } = useBusData(selectedOption);
 
@@ -49,9 +48,9 @@ function App() {
   const trainLayer = useMemo(() => {
     console.log("Layer recreated!");
     return new VectorLayer({
-      source: vehicleSource,
+      source: trainSource,
     });
-  }, [vehicleSource]);
+  }, [trainSource]);
 
   const busLayer = useMemo(() => {
     console.log("Layer recreated!");

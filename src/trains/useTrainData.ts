@@ -119,5 +119,5 @@ export function useTrainData() {
     });
   }, [trainArray]);
 
-  return { trainArray, setTrainArray, vehicleSource };
+  return { trainArray, setTrainArray, trainSource: vehicleSource };
 }
