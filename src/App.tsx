@@ -30,6 +30,8 @@ function App() {
 
   const [busCompany, setBusCompany] = useState<string | undefined>(undefined);
 
+  const [showMessage, setShowMessage] = useState(false);
+
   const [selectedOption, setSelectedOption] = useState("");
 
   const { trainSource } = useTrainData();
@@ -96,6 +98,10 @@ function App() {
 
   const handleDropdownChange = (newValue: string) => {
     setSelectedOption(newValue);
+    setShowMessage(true); // Show the message box when a new value is selected
+    setTimeout(() => {
+      setShowMessage(false); // Hide the message box after 3 seconds
+    }, 4000);
   };
 
   function handlePointerClick(e: MapBrowserEvent<PointerEvent>) {
@@ -188,6 +194,11 @@ function App() {
             <p>In Congestion? {clickedFeature.inCongestion ? "Yes" : "No"}</p>
           </div>
         ) : null}
+        {showMessage && (
+            <div className={"showInfo"}>
+            <p>You can click on buses to see if they are delayed.</p>
+            </div>
+        )}
       </main>
     </MapContext.Provider>
   );
