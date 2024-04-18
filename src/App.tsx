@@ -83,7 +83,7 @@ function App() {
       <header>
         <nav>
           <DrawCircleButton />
-          <Button drawType={"Symbol"} />
+          <Button drawType={"Symbol1"} />
           <Button drawType={"Symbol2"} />
           <DrawTrainStationButton />
           <FocusOnMeBtn />
