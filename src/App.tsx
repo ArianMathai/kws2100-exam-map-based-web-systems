@@ -19,12 +19,21 @@ import VectorSource from "ol/source/Vector";
 import VectorLayer from "ol/layer/Vector";
 import { Feature } from "ol";
 import { Point } from "ol/geom";
+import {Circle, Fill, Stroke, Style} from "ol/style";
+import CircleStyle from "ol/style/Circle";
+import {log} from "ol/console";
 
 interface coordinates {
-  coordinates: number[];
+  latitude:number;
+  longitude: number;
+}
+
+interface lineRef{
+  lineRef:string
 }
 
 interface Vehicle {
+  line:lineRef;
   vehicleId: string;
   delay: number;
   lastUpdated: string;
@@ -43,15 +52,41 @@ function App() {
   );
 
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
-  /*
+
+// Create a style for the point feature
+  const pointStyle = new Style({
+    image: new CircleStyle({
+      radius: 5, // Radius of the point in pixels
+      fill: new Fill({
+        color: 'blue', // Fill color
+      }),
+      stroke: new Stroke({
+        color: 'white', // Stroke color
+        width: 1, // Stroke width
+      }),
+    }),
+  });
+
   const vehicleSource = useMemo(() => {
-    console.log("Vehicles:", vehicles);
+    console.log()
     return new VectorSource({
-      features: vehicles?.map(
-          (v) => new Feature(new Point(v.location.coordinates)),
-      ),
+      features: vehicles.map((v) => {
+        const feature = new Feature(new Point([9, 60]));
+        const style = new Style({
+          image: new Circle({
+            radius: 6,
+            fill: new Fill({
+              color: 'blue', // You can set any color you prefer
+            }),
+          }),
+        });
+        feature.setStyle(style);
+        return feature;
+      }),
     });
   }, [vehicles]);
+
+
 
   const vehicleLayer = useMemo(() => {
     return new VectorLayer({
@@ -59,15 +94,17 @@ function App() {
     });
   }, [vehicleSource]);
 
- */
+
 
   const [webSocket, setWebSocket] = useState<WebSocket | undefined>(undefined);
 
   const mapRef = useRef() as MutableRefObject<HTMLDivElement>;
 
-  const [vectorLayers, setVectorLayers] = useState<Layer[]>([drawingLayer]);
+  const [vectorLayers, setVectorLayers] = useState<Layer[]>([drawingLayer,vehicleLayer]);
 
   const allLayers = useMemo(() => [baseLayer, ...vectorLayers], [baseLayer]);
+
+  const [trainArray, setTrainArray] = useState<Vehicle[]>([]);
 
   useEffect(() => {
     map.setTarget(mapRef.current);
@@ -76,6 +113,7 @@ function App() {
   useEffect(() => {
     map.setLayers(allLayers);
   }, [allLayers]);
+
 
   useEffect(() => {
     // Function to initialize the WebSocket connection
@@ -87,7 +125,8 @@ function App() {
       ws.onopen = () => {
         const subscriptionMessage = JSON.stringify({
           query: `subscription {
-        vehicles(codespaceId:"SKY") {
+        vehicles(mode: RAIL) {
+          line {lineRef}
           lastUpdated
           location {
             latitude
@@ -102,35 +141,25 @@ function App() {
       };
 
       ws.onmessage = (event) => {
-        const data = JSON.parse(event.data);
+        let trains:Vehicle[] = [];
+        const message = JSON.parse(event.data);
+        if (message && message.data && message.data.vehicles) {
+          if (message.data.vehicles.length > 0) {
+            const receivedVehicles: Vehicle[] = message.data.vehicles;
+            receivedVehicles.forEach((receivedVehicle) => {
+              if (!trainArray.some((train) => train.vehicleId === receivedVehicle.vehicleId)) {
+                trains.push(receivedVehicle);
+              } else {
+                console.log(`Vehicle with ID ${receivedVehicle.vehicleId} already exists in trainArray`);
+              }
+            });
 
-        const vehiclesFound: Vehicle[] = [];
-
-        if (data.data.vehicles.length != 0) {
-          //console.log("Message received:", data.data.vehicles);
-          data.data.vehicles.forEach((v: Vehicle) => {
-            /*
-            console.log("-------------------------------------");
-            console.log("Vehicle Id : " + v.vehicleId);
-            //console.log("Latitude :" + v.location.coordinates[0]);
-            //console.log("Latitude :" + v.location.coordinates[1]);
-            console.log("Last updated :" + v.lastUpdated);
-            console.log("Delay: " + v.delay);
-            console.log("-------------------------------------");
-
-             */
-
-            if (
-              !vehicles.some((vehicle) => vehicle.vehicleId === v.vehicleId)
-            ) {
-              vehiclesFound.push(v);
-            }
-          });
+          }
         }
 
-        if (vehiclesFound.length > 0) {
-          setVehicles((old) => [...old, ...vehiclesFound]);
-        }
+        // @ts-ignore
+        setTrainArray((old) => [...old,...trains]);
+
       };
 
       ws.onclose = () => {
@@ -161,9 +190,12 @@ function App() {
   }, []); // Empty dependency array ensures this effect runs only once
 
   useEffect(() => {
-    console.log("Vehicle Array length");
-    console.log(vehicles.length);
-  }, [vehicles]);
+    if(trainArray.length > 0){
+      console.log("Train Array: " + trainArray.length);
+    }
+  }, [trainArray]);
+
+
 
   return (
     <MapContext.Provider
