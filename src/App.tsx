@@ -43,7 +43,7 @@ function App() {
   );
 
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
-/*
+  /*
   const vehicleSource = useMemo(() => {
     console.log("Vehicles:", vehicles);
     return new VectorSource({
@@ -68,8 +68,6 @@ function App() {
   const [vectorLayers, setVectorLayers] = useState<Layer[]>([drawingLayer]);
 
   const allLayers = useMemo(() => [baseLayer, ...vectorLayers], [baseLayer]);
-
-
 
   useEffect(() => {
     map.setTarget(mapRef.current);
@@ -122,23 +120,17 @@ function App() {
 
              */
 
-
-
-            if (!vehicles.some((vehicle) => vehicle.vehicleId === v.vehicleId)) {
+            if (
+              !vehicles.some((vehicle) => vehicle.vehicleId === v.vehicleId)
+            ) {
               vehiclesFound.push(v);
             }
-
           });
-
         }
 
-        if(vehiclesFound.length > 0) {
-
+        if (vehiclesFound.length > 0) {
           setVehicles((old) => [...old, ...vehiclesFound]);
-
         }
-
-
       };
 
       ws.onclose = () => {
@@ -169,7 +161,7 @@ function App() {
   }, []); // Empty dependency array ensures this effect runs only once
 
   useEffect(() => {
-    console.log("Vehicle Array length")
+    console.log("Vehicle Array length");
     console.log(vehicles.length);
   }, [vehicles]);
 
