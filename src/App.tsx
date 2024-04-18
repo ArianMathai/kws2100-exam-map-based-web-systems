@@ -22,7 +22,7 @@ import { Point } from "ol/geom";
 import { Circle, Fill, Stroke, Style } from "ol/style";
 import CircleStyle from "ol/style/Circle";
 import { log } from "ol/console";
-import {fromLonLat} from "ol/proj";
+import { fromLonLat } from "ol/proj";
 
 interface coordinates {
   latitude: number;
@@ -69,7 +69,7 @@ function App() {
       }),
     }),
   });
-/*
+  /*
   const vehicleSource = useMemo(() => {
     console.log("TRIGGERED!");
     return new VectorSource({
@@ -82,25 +82,24 @@ function App() {
   const trainsTest = [
     {
       long: 10,
-      lat: 60
-    }
+      lat: 60,
+    },
   ];
-
 
   const vehicleSource = useMemo(() => {
     console.log("TRIGGERED!");
     const features = trainArray.map((train) => {
       console.log("Lat: " + train.location.latitude);
       console.log("Long: " + train.location.longitude);
-      return new Feature(new Point([train.location.latitude,train.location.longitude]));
+      return new Feature(
+        new Point([train.location.latitude, train.location.longitude]),
+      );
     });
 
     return new VectorSource({
       features: features,
     });
   }, [trainArray]);
-
-
 
   const vehicleLayer = useMemo(() => {
     return new VectorLayer({
@@ -118,8 +117,6 @@ function App() {
   ]);
 
   const allLayers = useMemo(() => [baseLayer, ...vectorLayers], [baseLayer]);
-
-
 
   useEffect(() => {
     map.setTarget(mapRef.current);
@@ -162,10 +159,16 @@ function App() {
             const receivedVehicles: Vehicle[] = message.data.vehicles;
             receivedVehicles.forEach((receivedVehicle) => {
               setTrainArray((prevTrainArray) => {
-                if (!prevTrainArray.some((train) => train.vehicleId === receivedVehicle.vehicleId)) {
+                if (
+                  !prevTrainArray.some(
+                    (train) => train.vehicleId === receivedVehicle.vehicleId,
+                  )
+                ) {
                   return [...prevTrainArray, receivedVehicle]; // Add the vehicle to the array
                 } else {
-                  console.log(`Vehicle with ID ${receivedVehicle.vehicleId} already exists in trainArray`);
+                  console.log(
+                    `Vehicle with ID ${receivedVehicle.vehicleId} already exists in trainArray`,
+                  );
                   return prevTrainArray; // Return the previous array unchanged
                 }
               });
@@ -173,7 +176,6 @@ function App() {
           }
         }
       };
-
 
       ws.onclose = () => {
         console.log("WebSocket disconnected. Attempting to reconnect...");
@@ -204,12 +206,10 @@ function App() {
   useEffect(() => {
     if (trainArray.length > 0) {
       trainArray.forEach((train) => {
-        console.log("Train: ",train);
-      })
-
+        console.log("Train: ", train);
+      });
     }
   }, [trainArray]);
-
 
   return (
     <MapContext.Provider
