@@ -23,8 +23,7 @@ import { Circle, Fill, Icon, Stroke, Style } from "ol/style";
 import CircleStyle from "ol/style/Circle";
 import { FeatureLike } from "ol/Feature";
 import TrainStationsCheckbox from "./trains/TrainStationsCheckbox";
-import {useTrainData} from "./trains/useTrainData";
-
+import { useTrainData } from "./trains/useTrainData";
 
 function App() {
   const [baseLayer, setBaseLayer] = useState<Layer>(

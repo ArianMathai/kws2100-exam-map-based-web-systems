@@ -1,21 +1,21 @@
-import {Feature} from "ol";
-import {Point} from "ol/geom";
+import { Feature } from "ol";
+import { Point } from "ol/geom";
 
 interface coordinates {
-    latitude: number;
-    longitude: number;
+  latitude: number;
+  longitude: number;
 }
 
 interface lineRef {
-    lineRef: string;
+  lineRef: string;
 }
 
 export interface Vehicle {
-    line: lineRef;
-    vehicleId: string;
-    delay: number;
-    lastUpdated: string;
-    location: coordinates;
+  line: lineRef;
+  vehicleId: string;
+  delay: number;
+  lastUpdated: string;
+  location: coordinates;
 }
 
 export type VehicleFeatures = { getProperties(): Vehicle } & Feature<Point>;
