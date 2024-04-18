@@ -3,7 +3,7 @@ import { Feature } from "ol";
 import { Point } from "ol/geom";
 import { Vehicle } from "../trains/trainTypes";
 import VectorSource from "ol/source/Vector";
-import { trainStyle } from "../trains/trainStyles";
+import {busStyle} from "../style/styles";
 
 export function useBusData(busCompany: string) {
   const [busArray, setBusArray] = useState<Vehicle[]>([]);
@@ -105,7 +105,7 @@ export function useBusData(busCompany: string) {
       const feature = new Feature(
         new Point([bus.location.longitude, bus.location.latitude]),
       );
-      feature.setStyle(trainStyle);
+      feature.setStyle(busStyle);
       feature.setProperties({
         id: bus.vehicleId,
         delay: bus.delay,

@@ -3,7 +3,7 @@ import { Feature } from "ol";
 import { Point } from "ol/geom";
 import { Vehicle } from "./trainTypes";
 import VectorSource from "ol/source/Vector";
-import { trainStyle } from "./trainStyles";
+import {trainStyle} from "../style/styles";
 
 export function useTrainData() {
   const [trainArray, setTrainArray] = useState<Vehicle[]>([]);

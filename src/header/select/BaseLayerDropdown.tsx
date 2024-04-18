@@ -9,6 +9,8 @@ const parser = new WMTSCapabilities();
 
 const ortoPhotoLayer = new TileLayer();
 
+//const API_KEY = 'Token ca31ff15-2dc4-412d-8442-84ee118c23f6'
+
 // function to parse fetched information
 async function loadWmtsSource(
   url: string,
