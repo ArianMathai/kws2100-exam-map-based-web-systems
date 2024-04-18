@@ -8,7 +8,7 @@ import React, {
 } from "react";
 import TileLayer from "ol/layer/Tile";
 import { OSM } from "ol/source";
-import OptionPicker from "./header/select/BaseLayerDropdown";
+import BaseLayerDropdown from "./header/select/BaseLayerDropdown";
 import Button from "./header/button/Button";
 import { drawingLayer, map, MapContext } from "./context/MapContext";
 import { Layer } from "ol/layer";
@@ -88,13 +88,13 @@ function App() {
           <Button drawType={"Symbol2"} />
           <DrawTrainStationButton />
           <FocusOnMeBtn />
-          <OptionPicker />
-          <TrainStationsCheckbox />
+          <BaseLayerDropdown />
           <Dropdown
             options={dropdownOptions}
             selectedValue={selectedOption}
             onChange={handleDropdownChange}
           />
+          <TrainStationsCheckbox />
         </nav>
       </header>
       <div ref={mapRef}></div>
