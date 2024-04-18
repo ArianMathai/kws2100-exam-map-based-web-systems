@@ -19,21 +19,21 @@ import VectorSource from "ol/source/Vector";
 import VectorLayer from "ol/layer/Vector";
 import { Feature } from "ol";
 import { Point } from "ol/geom";
-import {Circle, Fill, Stroke, Style} from "ol/style";
+import { Circle, Fill, Stroke, Style } from "ol/style";
 import CircleStyle from "ol/style/Circle";
-import {log} from "ol/console";
+import { log } from "ol/console";
 
 interface coordinates {
-  latitude:number;
+  latitude: number;
   longitude: number;
 }
 
-interface lineRef{
-  lineRef:string
+interface lineRef {
+  lineRef: string;
 }
 
 interface Vehicle {
-  line:lineRef;
+  line: lineRef;
   vehicleId: string;
   delay: number;
   lastUpdated: string;
@@ -53,22 +53,22 @@ function App() {
 
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
 
-// Create a style for the point feature
+  // Create a style for the point feature
   const pointStyle = new Style({
     image: new CircleStyle({
       radius: 5, // Radius of the point in pixels
       fill: new Fill({
-        color: 'blue', // Fill color
+        color: "blue", // Fill color
       }),
       stroke: new Stroke({
-        color: 'white', // Stroke color
+        color: "white", // Stroke color
         width: 1, // Stroke width
       }),
     }),
   });
 
   const vehicleSource = useMemo(() => {
-    console.log()
+    console.log();
     return new VectorSource({
       features: vehicles.map((v) => {
         const feature = new Feature(new Point([9, 60]));
@@ -76,7 +76,7 @@ function App() {
           image: new Circle({
             radius: 6,
             fill: new Fill({
-              color: 'blue', // You can set any color you prefer
+              color: "blue", // You can set any color you prefer
             }),
           }),
         });
@@ -86,21 +86,20 @@ function App() {
     });
   }, [vehicles]);
 
-
-
   const vehicleLayer = useMemo(() => {
     return new VectorLayer({
       source: vehicleSource,
     });
   }, [vehicleSource]);
 
-
-
   const [webSocket, setWebSocket] = useState<WebSocket | undefined>(undefined);
 
   const mapRef = useRef() as MutableRefObject<HTMLDivElement>;
 
-  const [vectorLayers, setVectorLayers] = useState<Layer[]>([drawingLayer,vehicleLayer]);
+  const [vectorLayers, setVectorLayers] = useState<Layer[]>([
+    drawingLayer,
+    vehicleLayer,
+  ]);
 
   const allLayers = useMemo(() => [baseLayer, ...vectorLayers], [baseLayer]);
 
@@ -113,7 +112,6 @@ function App() {
   useEffect(() => {
     map.setLayers(allLayers);
   }, [allLayers]);
-
 
   useEffect(() => {
     // Function to initialize the WebSocket connection
@@ -141,25 +139,29 @@ function App() {
       };
 
       ws.onmessage = (event) => {
-        let trains:Vehicle[] = [];
+        let trains: Vehicle[] = [];
         const message = JSON.parse(event.data);
         if (message && message.data && message.data.vehicles) {
           if (message.data.vehicles.length > 0) {
             const receivedVehicles: Vehicle[] = message.data.vehicles;
             receivedVehicles.forEach((receivedVehicle) => {
-              if (!trainArray.some((train) => train.vehicleId === receivedVehicle.vehicleId)) {
+              if (
+                !trainArray.some(
+                  (train) => train.vehicleId === receivedVehicle.vehicleId,
+                )
+              ) {
                 trains.push(receivedVehicle);
               } else {
-                console.log(`Vehicle with ID ${receivedVehicle.vehicleId} already exists in trainArray`);
+                console.log(
+                  `Vehicle with ID ${receivedVehicle.vehicleId} already exists in trainArray`,
+                );
               }
             });
-
           }
         }
 
         // @ts-ignore
-        setTrainArray((old) => [...old,...trains]);
-
+        setTrainArray((old) => [...old, ...trains]);
       };
 
       ws.onclose = () => {
@@ -190,12 +192,10 @@ function App() {
   }, []); // Empty dependency array ensures this effect runs only once
 
   useEffect(() => {
-    if(trainArray.length > 0){
+    if (trainArray.length > 0) {
       console.log("Train Array: " + trainArray.length);
     }
   }, [trainArray]);
-
-
 
   return (
     <MapContext.Provider
