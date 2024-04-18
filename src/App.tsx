@@ -19,10 +19,9 @@ import VectorSource from "ol/source/Vector";
 import VectorLayer from "ol/layer/Vector";
 import { Feature } from "ol";
 import { Point } from "ol/geom";
-import { Circle, Fill, Stroke, Style } from "ol/style";
+import { Circle, Fill, Icon, Stroke, Style } from "ol/style";
 import CircleStyle from "ol/style/Circle";
-import { log } from "ol/console";
-import { fromLonLat } from "ol/proj";
+import { FeatureLike } from "ol/Feature";
 
 interface coordinates {
   latitude: number;
@@ -41,10 +40,42 @@ interface Vehicle {
   location: coordinates;
 }
 
+type VehicleFeatures = { getProperties(): Vehicle } & Feature<Point>;
+
 interface Data {
   data: {
     vehicles: Vehicle[];
   };
+}
+
+function trainStyle(f: FeatureLike, resolution: number) {
+  const trainFeature = f as VehicleFeatures;
+  const radius = Math.min(2000 / resolution, 5);
+
+  // Check the delay of the train
+  const train = trainFeature.getProperties();
+
+  console.log("DELAY: " + train.delay);
+
+  return [
+    // Style for the icon
+    new Style({
+      image: new Icon({
+        src: "/kws-exam-2024/train.png",
+        scale: radius / 10, // Adjust scale based on radius
+      }),
+    }),
+    // Style for the stroke around the icon
+    new Style({
+      image: new Circle({
+        radius: radius + 5, // Adjust the radius to fit the icon
+        stroke: new Stroke({
+          color: train.delay > 0 ? "Red" : "Green",
+          width: 2,
+        }),
+      }),
+    }),
+  ];
 }
 
 function App() {
@@ -54,7 +85,7 @@ function App() {
 
   const [trainArray, setTrainArray] = useState<Vehicle[]>([]);
 
-  const [vehicles, setVehicles] = useState<Vehicle[]>([]);
+  //const [busses, setBusses] = useState<Vehicle[]>([]);
 
   // Create a style for the point feature
   const pointStyle = new Style({
@@ -69,48 +100,19 @@ function App() {
       }),
     }),
   });
-  /*
-  const vehicleSource = useMemo(() => {
-    console.log("TRIGGERED!");
-    return new VectorSource({
-      features: [new Feature(new Point([9, 59]))]
-    });
-  }, []);
-
- */
-
-  const trainsTest = [
-    {
-      long: 10,
-      lat: 60,
-    },
-    {
-      long: 9,
-      lat: 60,
-    },
-    {
-      long: 8,
-      lat: 60,
-    },
-    {
-      long: 11,
-      lat: 60,
-    },
-    {
-      long: 12,
-      lat: 60,
-    },
-  ];
 
   const vehicleSource = useMemo(() => {
-    console.log("TRIGGERED!");
     const features = trainArray.map((train) => {
-      return new Feature(
+      const feature = new Feature(
         new Point([train.location.longitude, train.location.latitude]),
       );
+      feature.setStyle(trainStyle);
+      feature.setProperties({
+        id: train.vehicleId,
+        delay: train.delay,
+      });
+      return feature;
     });
-
-    console.log("Number of features:", features.length);
 
     return new VectorSource({
       features: features,
@@ -234,14 +236,6 @@ function App() {
       }
     };
   }, []); // Empty dependency array ensures this effect runs only once
-
-  useEffect(() => {
-    if (trainArray.length > 0) {
-      trainArray.forEach((train) => {
-        console.log("Train: ", train);
-      });
-    }
-  }, [trainArray]);
 
   return (
     <MapContext.Provider
