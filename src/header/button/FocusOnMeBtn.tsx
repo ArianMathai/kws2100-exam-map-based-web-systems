@@ -29,7 +29,19 @@ function FocusOnMeBtn() {
     handleLoadCoords();
   }, []);
 
-  return <button onClick={handleFocusOnMe}>Focus on me</button>;
+  return (
+    <button
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        height: "auto",
+      }}
+      onClick={handleFocusOnMe}
+    >
+      <span className="material-symbols-outlined">my_location</span>Focus on me
+    </button>
+  );
 }
 
 export default FocusOnMeBtn;
