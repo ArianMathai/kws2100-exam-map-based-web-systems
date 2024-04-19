@@ -6,8 +6,14 @@ import VectorSource from "ol/source/Vector";
 import { trainStyle } from "../style/styles";
 
 export function useTrainData() {
-  const [trainArray, setTrainArray] = useState<Vehicle[]>([]);
+  const [trainArray, setTrainArray] = useState<Vehicle[] | []>(
+    JSON.parse(localStorage.getItem("trainArray") || "[]"),
+  );
   const [webSocket, setWebSocket] = useState<WebSocket | undefined>(undefined);
+
+  useEffect(() => {
+    localStorage.setItem("trainArray", JSON.stringify(trainArray));
+  }, [trainArray]);
 
   useEffect(() => {
     // Function to initialize the WebSocket connection
