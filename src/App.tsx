@@ -13,7 +13,7 @@ import { drawingLayer, map, MapContext } from "./context/MapContext";
 import { Layer } from "ol/layer";
 import FocusOnMeBtn from "./header/button/FocusOnMeBtn";
 import DrawTrainStationButton from "./header/button/DrawTrainStationButton";
-import DrawCircleButton from "./header/button/DrawCircleButton";
+import DrawPolygon from "./header/button/DrawPolygon";
 import VectorLayer from "ol/layer/Vector";
 import TrainStationsCheckbox from "./trains/TrainStationsCheckbox";
 import { useTrainData } from "./trains/useTrainData";
@@ -21,7 +21,7 @@ import { useBusData } from "./Busses/useBusData";
 import Dropdown from "./Dropdown";
 import { OccupancyStatus, Vehicle } from "./trains/trainTypes";
 import { FeatureLike } from "ol/Feature";
-import { MapBrowserEvent } from "ol";
+import { Feature, MapBrowserEvent } from "ol";
 
 function App() {
   const [baseLayer, setBaseLayer] = useState<Layer>(
@@ -167,7 +167,7 @@ function App() {
     >
       <header>
         <nav>
-          <DrawCircleButton />
+          <DrawPolygon vectorSource={busSource} />
           <DrawTrainStationButton />
           <FocusOnMeBtn />
           <BaseLayerDropdown />
