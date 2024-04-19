@@ -6,17 +6,26 @@ import VectorSource from "ol/source/Vector";
 import { busStyle } from "../style/styles";
 
 export function useBusData(busCompany: string) {
-  const [busArray, setBusArray] = useState<Vehicle[]>([]);
+  const [busArray, setBusArray] = useState<Vehicle[] | []>(
+    JSON.parse(localStorage.getItem("busArray") || "[]"),
+  );
   const [webSocket, setWebSocket] = useState<WebSocket | undefined>(undefined);
+
+  useEffect(() => {
+    localStorage.setItem("busArray", JSON.stringify(busArray));
+  }, [busArray]);
 
   useEffect(() => {
     // Close the existing WebSocket connection if it exists
     if (webSocket) {
       setBusArray([]);
+      localStorage.setItem("busArray", JSON.stringify(busArray));
       webSocket.close();
     }
 
     if (busCompany && busCompany != "default") {
+      setBusArray([]);
+      localStorage.setItem("busArray", JSON.stringify(busArray));
       const connectWebSocket = () => {
         const ws = new WebSocket(
           "wss://api.entur.io/realtime/v1/vehicles/subscriptions",
