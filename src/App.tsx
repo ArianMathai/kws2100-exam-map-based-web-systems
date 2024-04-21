@@ -22,6 +22,8 @@ import Dropdown from "./Dropdown";
 import { OccupancyStatus, Vehicle } from "./trains/trainTypes";
 import { FeatureLike } from "ol/Feature";
 import { Feature, MapBrowserEvent } from "ol";
+import VectorSource from "ol/source/Vector";
+import {LineString} from "ol/geom";
 
 function App() {
   const [baseLayer, setBaseLayer] = useState<Layer>(
@@ -34,7 +36,7 @@ function App() {
 
   const [selectedOption, setSelectedOption] = useState("");
 
-  const { trainSource } = useTrainData();
+  const { trainSource, trainArray, trainTrailSource } = useTrainData();
 
   const { busSource } = useBusData(selectedOption);
 
@@ -79,6 +81,14 @@ function App() {
     { value: "VYX", label: "Vy Express" },
   ];
 
+
+  const trainTrailLayer = useMemo(() => {
+    return new VectorLayer({
+      source: trainTrailSource,
+    })
+  }, [trainTrailSource])
+
+
   const trainLayer = useMemo(() => {
     return new VectorLayer({
       source: trainSource,
@@ -92,8 +102,8 @@ function App() {
   }, [busSource]);
 
   const allLayers = useMemo(
-    () => [baseLayer, ...vectorLayers, busLayer, trainLayer],
-    [baseLayer, vectorLayers, busLayer, trainLayer],
+    () => [baseLayer, ...vectorLayers, busLayer, trainLayer, trainTrailLayer],
+    [baseLayer, vectorLayers, busLayer, trainLayer, trainTrailLayer],
   );
 
   const handleDropdownChange = (newValue: string) => {
@@ -160,6 +170,7 @@ function App() {
       map.un("click", handlePointerClick);
     };
   }, [busLayer]);
+
 
   return (
     <MapContext.Provider
