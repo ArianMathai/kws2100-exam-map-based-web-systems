@@ -10,9 +10,15 @@ import { containsExtent } from "ol/extent";
 
 interface DrawPolygonProps {
   vectorSource: VectorSource<Feature<Geometry>>;
+  setFeaturesWithinPolygon: (feature: Feature<Geometry>[]) => void;
+  setIsBoxOpen: (isBoxOpen: boolean) => void;
 }
 
-function DrawPolygon({ vectorSource }: DrawPolygonProps) {
+function DrawPolygon({
+  vectorSource,
+  setFeaturesWithinPolygon,
+  setIsBoxOpen,
+}: DrawPolygonProps) {
   const { map, setVectorLayers, drawingLayer } = useContext(MapContext);
   const [source, setSource] = useState<VectorSource | undefined>();
   const draw = useMemo(() => new Draw({ source, type: "Polygon" }), [source]);
@@ -38,7 +44,8 @@ function DrawPolygon({ vectorSource }: DrawPolygonProps) {
     });
 
     if (featuresWithinPolygon.length > 0) {
-      console.log(featuresWithinPolygon);
+      setFeaturesWithinPolygon(featuresWithinPolygon);
+      setIsBoxOpen(true);
     }
 
     map.removeInteraction(draw);

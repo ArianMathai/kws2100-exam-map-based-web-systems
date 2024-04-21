@@ -1,18 +1,20 @@
 import { useEffect, useMemo, useState } from "react";
 import { Feature } from "ol";
-import { Point } from "ol/geom";
-import { Vehicle } from "./trainTypes";
-import VectorSource from "ol/source/Vector";
+import { LineString, Point } from "ol/geom";
+import { Train, Vehicle } from "./trainTypes";
+import VectorSource, { VectorSourceEvent } from "ol/source/Vector";
 import { trainStyle } from "../style/styles";
+import VectorLayer from "ol/layer/Vector";
+import { Stroke, Style } from "ol/style";
 
 export function useTrainData() {
-  const [trainArray, setTrainArray] = useState<Vehicle[] | []>(
-    JSON.parse(localStorage.getItem("trainArray") || "[]"),
+  const [trainArray, setTrainArray] = useState<Train[] | []>(
+    JSON.parse(sessionStorage.getItem("trainArray") || "[]"),
   );
   const [webSocket, setWebSocket] = useState<WebSocket | undefined>(undefined);
 
   useEffect(() => {
-    localStorage.setItem("trainArray", JSON.stringify(trainArray));
+    sessionStorage.setItem("trainArray", JSON.stringify(trainArray));
   }, [trainArray]);
 
   useEffect(() => {
@@ -41,11 +43,10 @@ export function useTrainData() {
       };
 
       ws.onmessage = (event) => {
-        let trains: Vehicle[] = [];
         const message = JSON.parse(event.data);
         if (message && message.data && message.data.vehicles) {
           if (message.data.vehicles.length > 0) {
-            const receivedVehicles: Vehicle[] = message.data.vehicles;
+            const receivedVehicles: Train[] = message.data.vehicles;
             receivedVehicles.forEach((receivedVehicle) => {
               setTrainArray((prevTrainArray) => {
                 if (
@@ -53,12 +54,18 @@ export function useTrainData() {
                     (train) => train.vehicleId === receivedVehicle.vehicleId,
                   )
                 ) {
+                  receivedVehicle.history = [];
                   return [...prevTrainArray, receivedVehicle];
                 } else {
                   return prevTrainArray.map((train) => {
                     if (train.vehicleId === receivedVehicle.vehicleId) {
+                      const updatedHistory = [
+                        ...(train.history || []),
+                        train.location,
+                      ];
                       return {
                         ...train,
+                        history: updatedHistory,
                         location: {
                           latitude: receivedVehicle.location.latitude,
                           longitude: receivedVehicle.location.longitude,
@@ -100,8 +107,9 @@ export function useTrainData() {
     };
   }, []); // Empty dependency array ensures this effect runs only once
 
-  const vehicleSource = useMemo(() => {
+  const trainSource = useMemo(() => {
     const features = trainArray.map((train) => {
+      //console.log("Train: ", train)
       const feature = new Feature(
         new Point([train.location.longitude, train.location.latitude]),
       );
@@ -118,5 +126,28 @@ export function useTrainData() {
     });
   }, [trainArray]);
 
-  return { trainArray, setTrainArray, trainSource: vehicleSource };
+  const trainTrailSource = useMemo(() => {
+    //console.log("Train array history, ", trainArray.map((t) => t.history))
+    const filteredFeatures = trainArray
+      .filter((t) => t.history && t.history.length >= 2)
+      .map((tr) => {
+        const coordinates = tr.history.map((p) => [p.longitude, p.latitude]);
+        const lineStringFeature = new Feature(new LineString(coordinates));
+        lineStringFeature.setStyle(
+          new Style({
+            stroke: new Stroke({
+              color: "red",
+              width: 3,
+            }),
+          }),
+        );
+        return lineStringFeature;
+      });
+
+    return new VectorSource({
+      features: filteredFeatures,
+    });
+  }, [trainArray]);
+
+  return { trainArray, setTrainArray, trainSource, trainTrailSource };
 }

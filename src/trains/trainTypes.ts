@@ -18,6 +18,17 @@ export enum OccupancyStatus {
   Unknown = "UNKNOWN",
 }
 
+export interface Train {
+  line: lineRef;
+  vehicleId: string;
+  delay: number;
+  location: coordinates;
+  lastUpdated: string;
+  history: coordinates[];
+}
+
+export type TrainFeatures = { getProperties(): Vehicle } & Feature<Point>;
+
 export interface Vehicle {
   line: lineRef;
   vehicleId: string;
