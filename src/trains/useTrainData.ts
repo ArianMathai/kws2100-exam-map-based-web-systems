@@ -9,12 +9,12 @@ import { Stroke, Style } from "ol/style";
 
 export function useTrainData() {
   const [trainArray, setTrainArray] = useState<Train[] | []>(
-    JSON.parse(localStorage.getItem("trainArray") || "[]"),
+    JSON.parse(sessionStorage.getItem("trainArray") || "[]"),
   );
   const [webSocket, setWebSocket] = useState<WebSocket | undefined>(undefined);
 
   useEffect(() => {
-    localStorage.setItem("trainArray", JSON.stringify(trainArray));
+    sessionStorage.setItem("trainArray", JSON.stringify(trainArray));
   }, [trainArray]);
 
   useEffect(() => {
