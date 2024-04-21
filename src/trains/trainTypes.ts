@@ -19,12 +19,12 @@ export enum OccupancyStatus {
 }
 
 export interface Train {
-  line: lineRef,
-  vehicleId: string,
-  delay: number,
-  location: coordinates,
-  lastUpdated: string,
-  history: coordinates[],
+  line: lineRef;
+  vehicleId: string;
+  delay: number;
+  location: coordinates;
+  lastUpdated: string;
+  history: coordinates[];
 }
 
 export type TrainFeatures = { getProperties(): Vehicle } & Feature<Point>;

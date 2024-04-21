@@ -23,7 +23,8 @@ import { OccupancyStatus, Vehicle } from "./trains/trainTypes";
 import { FeatureLike } from "ol/Feature";
 import { Feature, MapBrowserEvent } from "ol";
 import VectorSource from "ol/source/Vector";
-import {LineString} from "ol/geom";
+import { LineString } from "ol/geom";
+import FeaturesWithinPolygon from "./FeaturesWithinPolygon";
 
 function App() {
   const [baseLayer, setBaseLayer] = useState<Layer>(
@@ -31,6 +32,10 @@ function App() {
   );
 
   const [busCompany, setBusCompany] = useState<string | undefined>(undefined);
+
+  const [featuresWithinPolygon, setFeaturesWithinPolygon] = useState<
+    Feature[] | []
+  >([]);
 
   const [showMessage, setShowMessage] = useState(false);
 
@@ -43,6 +48,8 @@ function App() {
   const mapRef = useRef() as MutableRefObject<HTMLDivElement>;
 
   const [vectorLayers, setVectorLayers] = useState<Layer[]>([drawingLayer]);
+
+  const [isBoxOpen, setIsBoxOpen] = useState<boolean>(true);
 
   const [clickedFeature, setClickedFeature] = useState<Vehicle | undefined>(
     undefined,
@@ -81,13 +88,11 @@ function App() {
     { value: "VYX", label: "Vy Express" },
   ];
 
-
   const trainTrailLayer = useMemo(() => {
     return new VectorLayer({
       source: trainTrailSource,
-    })
-  }, [trainTrailSource])
-
+    });
+  }, [trainTrailSource]);
 
   const trainLayer = useMemo(() => {
     return new VectorLayer({
@@ -171,6 +176,9 @@ function App() {
     };
   }, [busLayer]);
 
+  useEffect(() => {
+    console.log(featuresWithinPolygon[0]?.getProperties());
+  }, [featuresWithinPolygon]);
 
   return (
     <MapContext.Provider
@@ -178,7 +186,11 @@ function App() {
     >
       <header>
         <nav>
-          <DrawPolygon vectorSource={busSource} />
+          <DrawPolygon
+            vectorSource={busSource}
+            setFeaturesWithinPolygon={setFeaturesWithinPolygon}
+            setIsBoxOpen={setIsBoxOpen}
+          />
           <DrawTrainStationButton />
           <FocusOnMeBtn />
           <BaseLayerDropdown />
@@ -191,6 +203,11 @@ function App() {
         </nav>
       </header>
       <main>
+        <FeaturesWithinPolygon
+          features={featuresWithinPolygon}
+          setIsBoxOpen={setIsBoxOpen}
+          isBoxOpen={isBoxOpen}
+        />
         <div ref={mapRef}></div>
         {clickedFeature ? (
           <div className={"clickedFeature"}>

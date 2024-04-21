@@ -1,11 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
 import { Feature } from "ol";
-import {LineString, Point} from "ol/geom";
-import {Train, Vehicle} from "./trainTypes";
-import VectorSource, {VectorSourceEvent} from "ol/source/Vector";
+import { LineString, Point } from "ol/geom";
+import { Train, Vehicle } from "./trainTypes";
+import VectorSource, { VectorSourceEvent } from "ol/source/Vector";
 import { trainStyle } from "../style/styles";
 import VectorLayer from "ol/layer/Vector";
-import {Stroke, Style} from "ol/style";
+import { Stroke, Style } from "ol/style";
 
 export function useTrainData() {
   const [trainArray, setTrainArray] = useState<Train[] | []>(
@@ -59,7 +59,10 @@ export function useTrainData() {
                 } else {
                   return prevTrainArray.map((train) => {
                     if (train.vehicleId === receivedVehicle.vehicleId) {
-                      const updatedHistory = [...(train.history || []), train.location];
+                      const updatedHistory = [
+                        ...(train.history || []),
+                        train.location,
+                      ];
                       return {
                         ...train,
                         history: updatedHistory,
@@ -123,32 +126,28 @@ export function useTrainData() {
     });
   }, [trainArray]);
 
-
-
-
-
   const trainTrailSource = useMemo(() => {
     //console.log("Train array history, ", trainArray.map((t) => t.history))
     const filteredFeatures = trainArray
-        .filter((t) => t.history && t.history.length >= 2)
-        .map((tr) => {
-          const coordinates = tr.history.map((p) => [p.longitude, p.latitude]);
-          const lineStringFeature = new Feature(new LineString(coordinates));
-          lineStringFeature.setStyle(new Style({
+      .filter((t) => t.history && t.history.length >= 2)
+      .map((tr) => {
+        const coordinates = tr.history.map((p) => [p.longitude, p.latitude]);
+        const lineStringFeature = new Feature(new LineString(coordinates));
+        lineStringFeature.setStyle(
+          new Style({
             stroke: new Stroke({
-              color: 'red',
-              width: 3
-            })
-          }))
-          return lineStringFeature;
-        });
+              color: "red",
+              width: 3,
+            }),
+          }),
+        );
+        return lineStringFeature;
+      });
 
     return new VectorSource({
       features: filteredFeatures,
-
     });
   }, [trainArray]);
-
 
   return { trainArray, setTrainArray, trainSource, trainTrailSource };
 }
