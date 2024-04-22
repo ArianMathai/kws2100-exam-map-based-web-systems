@@ -23,6 +23,7 @@ import { OccupancyStatus, Vehicle } from "./trains/trainTypes";
 import { FeatureLike } from "ol/Feature";
 import { Feature, MapBrowserEvent } from "ol";
 import FeaturesWithinPolygon from "./FeaturesWithinPolygon";
+import { getMinutes } from "./getMinutes";
 
 function App() {
   const [baseLayer, setBaseLayer] = useState<Layer>(
@@ -195,15 +196,19 @@ function App() {
         <div ref={mapRef}></div>
         {clickedFeature ? (
           <div className={"clickedFeature"}>
-            <p>From: {clickedFeature.originName}</p>
-            <p>To: {clickedFeature.destinationName}</p>
-            <p>
-              Delay?{" "}
-              {clickedFeature.delay > 0
-                ? `Yeah, sorry, ${clickedFeature.delay} seconds`
-                : "No. I'm speeding!"}
-            </p>
-            <p>In Congestion? {clickedFeature.inCongestion ? "Yes" : "No"}</p>
+            <div className={"clickedFeatureBox"}>
+              <p>From: {clickedFeature.originName}</p>
+              <p>To: {clickedFeature.destinationName}</p>
+              <p>
+                Delay?{" "}
+                {clickedFeature.delay > 0
+                  ? `Yes, ${getMinutes(clickedFeature.delay)} minutes`
+                  : clickedFeature.delay === 0
+                    ? "No. Right on time"
+                    : `No. Ahead of schedule with ${getMinutes(clickedFeature.delay)} minutes`}
+              </p>
+              <p>In Congestion? {clickedFeature.inCongestion ? "Yes" : "No"}</p>
+            </div>
           </div>
         ) : null}
         {showMessage && (

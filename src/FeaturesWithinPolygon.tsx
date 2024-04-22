@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Feature } from "ol";
-import { Vehicle } from "./trains/trainTypes"; // Assuming types.ts contains the definition of Vehicle interface
+import { Vehicle } from "./trains/trainTypes";
+import { getMinutes } from "./getMinutes"; // Assuming types.ts contains the definition of Vehicle interface
 
 function FeaturesWithinPolygon({
   features,
@@ -23,16 +24,19 @@ function FeaturesWithinPolygon({
 
   return (
     <div className={"markedFeatures"}>
-      <button className="closeButton" onClick={closeBox}>
-        X
-      </button>
+      <button onClick={closeBox}>X</button>
       <ul>
         {vehicles?.map((vehicle, index) => (
           <li key={index}>
             <div className={"markedFeatureBox"}>
               <p>From: {vehicle.originName}</p>
               <p>To: {vehicle.destinationName}</p>
-              <p>Delayed? {vehicle.delay > 0 ? "Yes" : "No"}</p>
+              <p>
+                Delayed?{" "}
+                {vehicle.delay > 0
+                  ? `Yes, ${getMinutes(vehicle.delay)} minutes`
+                  : "No"}
+              </p>
             </div>
           </li>
         ))}
