@@ -1,5 +1,5 @@
 import { FeatureLike } from "ol/Feature";
-import {Circle, Fill, Icon, Stroke, Style, Text} from "ol/style";
+import { Circle, Fill, Icon, Stroke, Style, Text } from "ol/style";
 import { VehicleFeatures } from "../trains/trainTypes";
 
 export function trainStationStyle(f: FeatureLike, resolution: number) {
@@ -86,15 +86,15 @@ export function trainStyle(f: FeatureLike, resolution: number) {
 }
 
 export function trainstationStyle(feature: FeatureLike) {
-  const size = feature.get('features').length;
+  const size = feature.get("features").length;
 
-  if(size == 1){
+  if (size == 1) {
     return new Style({
       image: new Icon({
         src: "/kws-exam-2024/station-flag.svg",
         scale: 0.5, // Adjust scale based on radius
       }),
-    })
+    });
   } else {
     return new Style({
       image: new Circle({
@@ -104,15 +104,14 @@ export function trainstationStyle(feature: FeatureLike) {
       }),
       text: new Text({
         text: size.toString() + "\n stations",
-        font: '10px Arial',     // Set the font style
-        fill: new Fill({ color: 'black' }),  // Set the text color
-        stroke: new Stroke({ color: 'white', width: 2 }), // Set the text stroke
-        offsetX: 0,             // Set horizontal offset
-        offsetY: 0,             // Set vertical offset
-        textAlign: 'center',    // Set text alignment
-        textBaseline: 'middle', // Set text baseline
-      })
+        font: "10px Arial", // Set the font style
+        fill: new Fill({ color: "black" }), // Set the text color
+        stroke: new Stroke({ color: "white", width: 2 }), // Set the text stroke
+        offsetX: 0, // Set horizontal offset
+        offsetY: 0, // Set vertical offset
+        textAlign: "center", // Set text alignment
+        textBaseline: "middle", // Set text baseline
+      }),
     });
   }
-
 }

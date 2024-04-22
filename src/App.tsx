@@ -125,7 +125,7 @@ function App() {
   }
 
   useEffect(() => {
-    if (trainStationsChecked){
+    if (trainStationsChecked) {
       setSelectedOption("default");
       busLayer.getSource()?.clear();
     }
@@ -147,15 +147,9 @@ function App() {
     };
   }, [busLayer]);
 
-
-
   return (
     <MapContext.Provider
-      value={{map,
-        setBaseLayer,
-        vectorLayers,
-        setVectorLayers,
-        drawingLayer}}
+      value={{ map, setBaseLayer, vectorLayers, setVectorLayers, drawingLayer }}
     >
       <header>
         <div className={"applicationHeading"}>WillYouBeDelayed.com</div>
@@ -173,7 +167,10 @@ function App() {
             selectedValue={selectedOption}
             onChange={handleDropdownChange}
           />
-          <TrainStationsCheckbox checked={trainStationsChecked} setChecked={setTrainStationsChecked} />
+          <TrainStationsCheckbox
+            checked={trainStationsChecked}
+            setChecked={setTrainStationsChecked}
+          />
         </nav>
       </header>
       <main>

@@ -13,18 +13,25 @@ import VectorSource from "ol/source/Vector";
 import { GeoJSON } from "ol/format";
 import React from "react";
 import { FeatureLike } from "ol/Feature";
-import {trainstationStyle} from "../style/styles";
-import {useTrainData} from "./useTrainData";
-import {Cluster} from "ol/source";
-import {TrainstationFeature} from "./trainTypes";
-import {useBusData} from "../Busses/useBusData";
+import { trainstationStyle } from "../style/styles";
+import { useTrainData } from "./useTrainData";
+import { Cluster } from "ol/source";
+import { TrainstationFeature } from "./trainTypes";
+import { useBusData } from "../Busses/useBusData";
 
-function TrainStationsCheckbox({checked, setChecked} : {checked:boolean, setChecked: (checked: boolean) => void }) {
+function TrainStationsCheckbox({
+  checked,
+  setChecked,
+}: {
+  checked: boolean;
+  setChecked: (checked: boolean) => void;
+}) {
   const { map, setVectorLayers, vectorLayers } = useContext(MapContext);
-  const [hoveredTrainstation, setHoveredTrainstation] =
-    useState<TrainstationFeature | undefined>(undefined);
+  const [hoveredTrainstation, setHoveredTrainstation] = useState<
+    TrainstationFeature | undefined
+  >(undefined);
 
-  const {trainLayer, trainTrailLayer} = useTrainData();
+  const { trainLayer, trainTrailLayer } = useTrainData();
 
   const overlay = useMemo(() => new Overlay({}), []);
   const overlayRef = useRef() as MutableRefObject<HTMLDivElement>;
@@ -32,21 +39,19 @@ function TrainStationsCheckbox({checked, setChecked} : {checked:boolean, setChec
   const trainStationSource = new VectorSource({
     url: "/kws-exam-2024/Jernbanestasjoner.json",
     format: new GeoJSON(),
-  })
+  });
 
   const clusterSource = new Cluster({
-    source:trainStationSource,
+    source: trainStationSource,
     distance: 30,
-    minDistance: 10
-
-  })
+    minDistance: 10,
+  });
 
   const trainstationLayer = new VectorLayer({
     className: "trainstationLayer",
     source: clusterSource,
     style: trainstationStyle,
   });
-
 
   function handlePointerMove(e: MapBrowserEvent<PointerEvent>) {
     const features: FeatureLike[] = [];
@@ -58,12 +63,11 @@ function TrainStationsCheckbox({checked, setChecked} : {checked:boolean, setChec
     if (features.length === 1) {
       const hoveredFeature = features[0] as TrainstationFeature;
 
-      if (hoveredFeature.get('features').length === 1) {
-        const clusterFeatures = hoveredFeature.get('features');
+      if (hoveredFeature.get("features").length === 1) {
+        const clusterFeatures = hoveredFeature.get("features");
         setHoveredTrainstation(clusterFeatures[0]);
         overlay.setPosition(e.coordinate);
       }
-
     } else {
       setHoveredTrainstation(undefined);
       overlay.setPosition(undefined);
@@ -79,21 +83,28 @@ function TrainStationsCheckbox({checked, setChecked} : {checked:boolean, setChec
     };
   }, []);
 
-
   useEffect(() => {
     if (checked && trainLayer && trainTrailLayer) {
-      setVectorLayers((old) => [...old, trainstationLayer, trainLayer, trainTrailLayer]);
+      setVectorLayers((old) => [
+        ...old,
+        trainstationLayer,
+        trainLayer,
+        trainTrailLayer,
+      ]);
       map.on("pointermove", handlePointerMove);
     }
     return () => {
       setVectorLayers((old) =>
-          old.filter((layer) => layer !== trainLayer && layer !== trainTrailLayer && layer !== trainstationLayer)
+        old.filter(
+          (layer) =>
+            layer !== trainLayer &&
+            layer !== trainTrailLayer &&
+            layer !== trainstationLayer,
+        ),
       );
       map.un("pointermove", handlePointerMove);
     };
   }, [checked, trainLayer, trainTrailLayer]);
-
-
 
   return (
     <div>

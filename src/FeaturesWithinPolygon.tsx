@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Feature } from "ol";
 import { Vehicle } from "./trains/trainTypes";
 import { getMinutes } from "./getMinutes";
-import {drawingLayer} from "./context/MapContext"; // Assuming types.ts contains the definition of Vehicle interface
+import { drawingLayer } from "./context/MapContext"; // Assuming types.ts contains the definition of Vehicle interface
 
 function FeaturesWithinPolygon({
   features,

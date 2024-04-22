@@ -20,9 +20,8 @@ function DrawPolygon({
   setIsBoxOpen,
 }: DrawPolygonProps) {
   const { map, setVectorLayers, drawingLayer } = useContext(MapContext);
-  const [source, setSource] = useState<VectorSource | undefined >();
+  const [source, setSource] = useState<VectorSource | undefined>();
   const draw = useMemo(() => new Draw({ source, type: "Polygon" }), [source]);
-
 
   const handleDrawingPolygon = (e: VectorSourceEvent) => {
     const polygonFeature = e.feature;
