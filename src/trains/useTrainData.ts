@@ -126,6 +126,12 @@ export function useTrainData() {
     });
   }, [trainArray]);
 
+  const trainLayer = useMemo(() => {
+    return new VectorLayer({
+      source: trainSource,
+    });
+  }, [trainSource]);
+
   const trainTrailSource = useMemo(() => {
     //console.log("Train array history, ", trainArray.map((t) => t.history))
     const filteredFeatures = trainArray
@@ -149,5 +155,11 @@ export function useTrainData() {
     });
   }, [trainArray]);
 
-  return { trainArray, setTrainArray, trainSource, trainTrailSource };
+  const trainTrailLayer = useMemo(() => {
+    return new VectorLayer({
+      source: trainTrailSource,
+    });
+  }, [trainTrailSource]);
+
+  return { trainArray, setTrainArray, trainSource, trainTrailSource, trainTrailLayer, trainLayer };
 }

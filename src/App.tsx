@@ -40,7 +40,7 @@ function App() {
 
   const [selectedOption, setSelectedOption] = useState("");
 
-  const { trainSource, trainArray, trainTrailSource } = useTrainData();
+  //const { trainLayer, trainTrailLayer } = useTrainData();
 
   const { busSource } = useBusData(selectedOption);
 
@@ -73,18 +73,6 @@ function App() {
     { value: "VYX", label: "Vy Express" },
   ];
 
-  const trainTrailLayer = useMemo(() => {
-    return new VectorLayer({
-      source: trainTrailSource,
-    });
-  }, [trainTrailSource]);
-
-  const trainLayer = useMemo(() => {
-    return new VectorLayer({
-      source: trainSource,
-    });
-  }, [trainSource]);
-
   const busLayer = useMemo(() => {
     return new VectorLayer({
       source: busSource,
@@ -92,8 +80,8 @@ function App() {
   }, [busSource]);
 
   const allLayers = useMemo(
-    () => [baseLayer, ...vectorLayers, busLayer, trainLayer, trainTrailLayer],
-    [baseLayer, vectorLayers, busLayer, trainLayer, trainTrailLayer],
+    () => [baseLayer, ...vectorLayers, busLayer],
+    [baseLayer, vectorLayers, busLayer],
   );
 
   const handleDropdownChange = (newValue: string) => {
@@ -165,9 +153,15 @@ function App() {
     console.log(featuresWithinPolygon[0]?.getProperties());
   }, [featuresWithinPolygon]);
 
+
+
   return (
     <MapContext.Provider
-      value={{ map, setBaseLayer, vectorLayers, setVectorLayers, drawingLayer }}
+      value={{map,
+        setBaseLayer,
+        vectorLayers,
+        setVectorLayers,
+        drawingLayer,}}
     >
       <header>
         <div className={"applicationHeading"}>WillYouBeDelayed.com</div>

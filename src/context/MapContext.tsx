@@ -19,6 +19,7 @@ export const MapContext = React.createContext<{
   vectorLayers: Layer[];
   setVectorLayers: Dispatch<SetStateAction<Layer[]>>;
   drawingLayer: VectorLayer<VectorSource>;
+
   /*
     clickedKommune: Feature | undefined;
     setClickedKommune: Dispatch<SetStateAction<Feature | undefined>>;

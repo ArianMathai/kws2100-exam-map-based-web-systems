@@ -14,6 +14,7 @@ import { GeoJSON } from "ol/format";
 import React from "react";
 import { FeatureLike } from "ol/Feature";
 import { Circle, Fill, Stroke, Style } from "ol/style";
+import {useTrainData} from "./useTrainData";
 
 type TrainstationProperties = {
   navn: string;
@@ -49,6 +50,8 @@ function TrainStationsCheckbox() {
   const [clickedFeature, setClickedFeature] = useState<
     TrainstationFeature | undefined
   >(undefined);
+
+  const {trainLayer, trainTrailLayer} = useTrainData();
 
   const overlay = useMemo(() => new Overlay({}), []);
   const overlayRef = useRef() as MutableRefObject<HTMLDivElement>;
@@ -105,15 +108,23 @@ function TrainStationsCheckbox() {
     };
   }, [checked]);
 
+  useEffect(() => {
+    if (checked){
+      setVectorLayers((old) => [...old, trainLayer, trainTrailLayer])
+    }
+  }, [checked]);
+
+
+
   return (
     <div>
-      <label>
+      <label className="trainStationsCheckboxLabel">
         <input
           type="checkbox"
           checked={checked}
           onChange={(e) => setChecked(e.target.checked)}
         />
-        {!checked ? "Vis" : "Skjul"} Togstasjoner
+        {!checked ? "Show" : "Hide"} Trains and train stations
       </label>
       <div ref={overlayRef} className={"overlay"}>
         <p>Togstasjon: {clickedFeature?.getProperties().navn}</p>
