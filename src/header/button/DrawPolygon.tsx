@@ -46,6 +46,8 @@ function DrawPolygon({
     if (featuresWithinPolygon.length > 0) {
       setFeaturesWithinPolygon(featuresWithinPolygon);
       setIsBoxOpen(true);
+    } else {
+      setTimeout(() => drawingLayer.getSource()?.clear(), 3000);
     }
 
     map.removeInteraction(draw);
