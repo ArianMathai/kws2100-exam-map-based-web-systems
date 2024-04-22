@@ -43,7 +43,7 @@ function hoveredTrainstationStyle() {
   });
 }
 function TrainStationsCheckbox() {
-  const { map, setVectorLayers } = useContext(MapContext);
+  const { map, setVectorLayers, vectorLayers } = useContext(MapContext);
   const [checked, setChecked] = useState(false);
   const [hoveredTrainstation, setHoveredTrainstation] =
     useState<TrainstationFeature>();
@@ -99,25 +99,16 @@ function TrainStationsCheckbox() {
 
   useEffect(() => {
     if (checked) {
-      setVectorLayers((old) => [...old, trainstationLayer]);
+      setVectorLayers((old) => [...old, trainstationLayer, trainLayer, trainTrailLayer]);
       map.on("pointermove", handlePointerMove);
     }
     return () => {
-      setVectorLayers((old) => old.filter((old) => old != trainstationLayer));
+      setVectorLayers((old) =>
+          old.filter((layer) => layer !== trainLayer && layer !== trainTrailLayer && layer !== trainstationLayer)
+      );
       map.un("pointermove", handlePointerMove);
     };
   }, [checked]);
-
-  useEffect(() => {
-    if (checked) {
-      setVectorLayers((old) => [...old, trainLayer, trainTrailLayer]);
-    } else {
-      setVectorLayers((old) =>
-          old.filter((layer) => layer !== trainLayer && layer !== trainTrailLayer)
-      );
-    }
-  }, [checked]);
-
 
 
   return (
