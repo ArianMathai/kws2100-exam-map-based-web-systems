@@ -22,6 +22,7 @@ import { FeatureLike } from "ol/Feature";
 import { Feature, MapBrowserEvent } from "ol";
 import FeaturesWithinPolygon from "./FeaturesWithinPolygon";
 import { getMinutes } from "./getMinutes";
+import Routing from "./Routing";
 
 const dropdownOptions = [
   { value: "default", label: "Choose Bus Company" },
@@ -174,6 +175,7 @@ function App() {
             checked={trainStationsChecked}
             setChecked={setTrainStationsChecked}
           />
+          <Routing/>
         </nav>
       </header>
       <main>

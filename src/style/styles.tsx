@@ -16,8 +16,8 @@ export function trainStationStyle(f: FeatureLike, resolution: number) {
       ? [
           new Style({
             image: new Icon({
-              src: "/kws-exam-2024/boat.svg",
-              scale: radius / 10, // Adjust scale based on radius
+              src: "/kws-exam-2024/train-station.svg",
+              scale: radius / 25, // Adjust scale based on radius
             }),
           }),
         ]
@@ -91,7 +91,7 @@ export function trainstationStyle(feature: FeatureLike) {
   if (size == 1) {
     return new Style({
       image: new Icon({
-        src: "/kws-exam-2024/station-flag.svg",
+        src: "/kws-exam-2024/train-station.svg",
         scale: 0.5, // Adjust scale based on radius
       }),
     });
