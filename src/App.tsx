@@ -170,6 +170,7 @@ function App() {
       value={{ map, setBaseLayer, vectorLayers, setVectorLayers, drawingLayer }}
     >
       <header>
+        <div className={"applicationHeading"}>WillYouBeDelayed.com</div>
         <nav>
           <DrawPolygon
             vectorSource={busSource}
