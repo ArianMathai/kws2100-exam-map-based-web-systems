@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { Feature } from "ol";
 import { Vehicle } from "./trains/trainTypes";
-import { getMinutes } from "./getMinutes"; // Assuming types.ts contains the definition of Vehicle interface
+import { getMinutes } from "./getMinutes";
+import {drawingLayer} from "./context/MapContext"; // Assuming types.ts contains the definition of Vehicle interface
 
 function FeaturesWithinPolygon({
   features,
@@ -20,6 +21,7 @@ function FeaturesWithinPolygon({
 
   const closeBox = () => {
     setIsBoxOpen(false);
+    drawingLayer.getSource()?.clear();
   };
 
   return (

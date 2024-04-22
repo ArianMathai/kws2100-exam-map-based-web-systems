@@ -161,5 +161,5 @@ export function useTrainData() {
     });
   }, [trainTrailSource]);
 
-  return { trainArray, setTrainArray, trainSource, trainTrailSource, trainTrailLayer, trainLayer };
+  return { trainArray, setTrainArray, trainTrailLayer, trainLayer };
 }

@@ -4,6 +4,7 @@ import { Point } from "ol/geom";
 import { Vehicle } from "../trains/trainTypes";
 import VectorSource from "ol/source/Vector";
 import { busStyle } from "../style/styles";
+import VectorLayer from "ol/layer/Vector";
 
 export function useBusData(busCompany: string) {
   const [busArray, setBusArray] = useState<Vehicle[] | []>(
@@ -137,5 +138,11 @@ export function useBusData(busCompany: string) {
     });
   }, [busArray]);
 
-  return { busArray, setBusArray, busSource };
+  const busLayer = useMemo(() => {
+    return new VectorLayer({
+      source: busSource,
+    });
+  }, [busSource]);
+
+  return { busArray, setBusArray, busSource, busLayer };
 }

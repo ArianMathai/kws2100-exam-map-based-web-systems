@@ -1,5 +1,5 @@
 import { useContext, useEffect, useMemo, useState } from "react";
-import { MapContext } from "../../context/MapContext";
+import { MapContext, drawingLayer } from "../../context/MapContext";
 import VectorSource, { VectorSourceEvent } from "ol/source/Vector";
 import { Draw } from "ol/interaction";
 import React from "react";
@@ -20,8 +20,9 @@ function DrawPolygon({
   setIsBoxOpen,
 }: DrawPolygonProps) {
   const { map, setVectorLayers, drawingLayer } = useContext(MapContext);
-  const [source, setSource] = useState<VectorSource | undefined>();
+  const [source, setSource] = useState<VectorSource | undefined >();
   const draw = useMemo(() => new Draw({ source, type: "Polygon" }), [source]);
+
 
   const handleDrawingPolygon = (e: VectorSourceEvent) => {
     const polygonFeature = e.feature;
