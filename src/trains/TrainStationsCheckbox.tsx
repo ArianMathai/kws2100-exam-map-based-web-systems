@@ -109,8 +109,12 @@ function TrainStationsCheckbox() {
   }, [checked]);
 
   useEffect(() => {
-    if (checked){
-      setVectorLayers((old) => [...old, trainLayer, trainTrailLayer])
+    if (checked) {
+      setVectorLayers((old) => [...old, trainLayer, trainTrailLayer]);
+    } else {
+      setVectorLayers((old) =>
+          old.filter((layer) => layer !== trainLayer && layer !== trainTrailLayer)
+      );
     }
   }, [checked]);
 
