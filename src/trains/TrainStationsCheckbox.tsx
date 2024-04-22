@@ -92,13 +92,15 @@ function TrainStationsCheckbox() {
       map.removeOverlay(overlay);
     };
   }, []);
+
+
   useEffect(() => {
     hoveredTrainstation?.setStyle(hoveredTrainstationStyle());
     return () => hoveredTrainstation?.setStyle(undefined);
   }, [hoveredTrainstation]);
 
   useEffect(() => {
-    if (checked) {
+    if (checked && trainLayer && trainTrailLayer) {
       setVectorLayers((old) => [...old, trainstationLayer, trainLayer, trainTrailLayer]);
       map.on("pointermove", handlePointerMove);
     }
@@ -108,7 +110,12 @@ function TrainStationsCheckbox() {
       );
       map.un("pointermove", handlePointerMove);
     };
-  }, [checked]);
+  }, [checked, trainLayer, trainTrailLayer]);
+
+  useEffect(() => {
+    console.log("trainLayer:", trainLayer);
+    console.log("trainTrailLayer:", trainTrailLayer);
+  }, []);
 
 
   return (
