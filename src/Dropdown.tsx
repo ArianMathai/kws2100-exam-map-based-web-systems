@@ -21,7 +21,11 @@ function Dropdown({ options, selectedValue, onChange }: DropdownProps) {
   };
 
   return (
-    <select value={selectedValue} onChange={handleChange}>
+    <select
+      className={"baseLayer_select"}
+      value={selectedValue}
+      onChange={handleChange}
+    >
       {options.map((option, index) => (
         <option key={index} value={option.value}>
           {option.label}

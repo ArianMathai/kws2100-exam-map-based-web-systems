@@ -53,6 +53,8 @@ function App() {
 
   const [showMessage, setShowMessage] = useState(false);
 
+  const [showInfoMessage, setShowInfoMessage] = useState(false);
+
   const [trainStationsChecked, setTrainStationsChecked] = useState(false);
 
   const [selectedOption, setSelectedOption] = useState("");
@@ -158,6 +160,7 @@ function App() {
             vectorSource={busSource}
             setFeaturesWithinPolygon={setFeaturesWithinPolygon}
             setIsBoxOpen={setIsBoxOpen}
+            setShowInfoMessage={setShowInfoMessage}
           />
           <DrawTrainStationButton />
           <FocusOnMeBtn />
@@ -200,6 +203,11 @@ function App() {
         {showMessage && (
           <div className={"showInfo"}>
             <p>You can click on buses to see if they are delayed.</p>
+          </div>
+        )}
+        {showInfoMessage && (
+          <div className={"showInfo"}>
+            <p>If you choose bus company you can draw polygon around buses.</p>
           </div>
         )}
       </main>

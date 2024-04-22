@@ -12,12 +12,14 @@ interface DrawPolygonProps {
   vectorSource: VectorSource<Feature<Geometry>>;
   setFeaturesWithinPolygon: (feature: Feature<Geometry>[]) => void;
   setIsBoxOpen: (isBoxOpen: boolean) => void;
+  setShowInfoMessage: (showInfoMessage: boolean) => void;
 }
 
 function DrawPolygon({
   vectorSource,
   setFeaturesWithinPolygon,
   setIsBoxOpen,
+  setShowInfoMessage,
 }: DrawPolygonProps) {
   const { map, setVectorLayers, drawingLayer } = useContext(MapContext);
   const [source, setSource] = useState<VectorSource | undefined>();
@@ -47,7 +49,14 @@ function DrawPolygon({
       setFeaturesWithinPolygon(featuresWithinPolygon);
       setIsBoxOpen(true);
     } else {
-      setTimeout(() => drawingLayer.getSource()?.clear(), 3000);
+      setShowInfoMessage(true);
+      setTimeout(() => {
+        drawingLayer.getSource()?.clear(); // Set showInfoMessage to false after the timeout
+      }, 3000);
+
+      setTimeout(() => {
+        setShowInfoMessage(false);
+      }, 5000);
     }
 
     map.removeInteraction(draw);
