@@ -8,7 +8,6 @@ import React, {
 import TileLayer from "ol/layer/Tile";
 import { OSM } from "ol/source";
 import BaseLayerDropdown from "./header/select/BaseLayerDropdown";
-import Button from "./header/button/Button";
 import { drawingLayer, map, MapContext } from "./context/MapContext";
 import { Layer } from "ol/layer";
 import FocusOnMeBtn from "./header/button/FocusOnMeBtn";
@@ -16,7 +15,6 @@ import DrawTrainStationButton from "./header/button/DrawTrainStationButton";
 import DrawPolygon from "./header/button/DrawPolygon";
 import VectorLayer from "ol/layer/Vector";
 import TrainStationsCheckbox from "./trains/TrainStationsCheckbox";
-import { useTrainData } from "./trains/useTrainData";
 import { useBusData } from "./Busses/useBusData";
 import Dropdown from "./Dropdown";
 import { OccupancyStatus, Vehicle } from "./trains/trainTypes";
@@ -25,12 +23,29 @@ import { Feature, MapBrowserEvent } from "ol";
 import FeaturesWithinPolygon from "./FeaturesWithinPolygon";
 import { getMinutes } from "./getMinutes";
 
+const dropdownOptions = [
+  { value: "default", label: "Choose Bus Company" },
+  { value: "VYX", label: "Vy Express" },
+  { value: "VOT", label: "Vestfold og Telemark" },
+  { value: "SKY", label: "Vestland (Skyss)" },
+  { value: "AKT", label: "Agder (AKT)" },
+  { value: "ATB", label: "Trøndelag (AtB)" },
+  { value: "BRA", label: "Viken (Brakar)" },
+  { value: "FIN", label: "Troms og Finnmark (Snelandia)" },
+  { value: "MOR", label: "Møre og Romsdal (Fram)" },
+  { value: "NOR", label: "Nordland fylkeskommune" },
+  { value: "NSB", label: "Vy" },
+  { value: "OST", label: "Viken (Østfold kollektivtrafikk)" },
+  { value: "SOF", label: "Vestland (Kringom)" },
+  { value: "TRO", label: "Troms og Finnmark (Troms fylkestrafikk)" },
+  { value: "VOT", label: "Vestfold og Telemark" },
+  { value: "VYX", label: "Vy Express" },
+];
+
 function App() {
   const [baseLayer, setBaseLayer] = useState<Layer>(
     new TileLayer({ source: new OSM() }),
   );
-
-  const [busCompany, setBusCompany] = useState<string | undefined>(undefined);
 
   const [featuresWithinPolygon, setFeaturesWithinPolygon] = useState<
     Feature[] | []
@@ -38,11 +53,11 @@ function App() {
 
   const [showMessage, setShowMessage] = useState(false);
 
+  const [trainStationsChecked, setTrainStationsChecked] = useState(false);
+
   const [selectedOption, setSelectedOption] = useState("");
 
-  const { trainSource, trainArray, trainTrailSource } = useTrainData();
-
-  const { busSource } = useBusData(selectedOption);
+  const { busLayer, busSource } = useBusData(selectedOption);
 
   const mapRef = useRef() as MutableRefObject<HTMLDivElement>;
 
@@ -54,50 +69,14 @@ function App() {
     undefined,
   );
 
-  const dropdownOptions = [
-    { value: "default", label: "Choose Bus Company" },
-    { value: "VYX", label: "Vy Express" },
-    { value: "VOT", label: "Vestfold og Telemark" },
-    { value: "SKY", label: "Vestland (Skyss)" },
-    { value: "AKT", label: "Agder (AKT)" },
-    { value: "ATB", label: "Trøndelag (AtB)" },
-    { value: "BRA", label: "Viken (Brakar)" },
-    { value: "FIN", label: "Troms og Finnmark (Snelandia)" },
-    { value: "MOR", label: "Møre og Romsdal (Fram)" },
-    { value: "NOR", label: "Nordland fylkeskommune" },
-    { value: "NSB", label: "Vy" },
-    { value: "OST", label: "Viken (Østfold kollektivtrafikk)" },
-    { value: "SOF", label: "Vestland (Kringom)" },
-    { value: "TRO", label: "Troms og Finnmark (Troms fylkestrafikk)" },
-    { value: "VOT", label: "Vestfold og Telemark" },
-    { value: "VYX", label: "Vy Express" },
-  ];
-
-  const trainTrailLayer = useMemo(() => {
-    return new VectorLayer({
-      source: trainTrailSource,
-    });
-  }, [trainTrailSource]);
-
-  const trainLayer = useMemo(() => {
-    return new VectorLayer({
-      source: trainSource,
-    });
-  }, [trainSource]);
-
-  const busLayer = useMemo(() => {
-    return new VectorLayer({
-      source: busSource,
-    });
-  }, [busSource]);
-
   const allLayers = useMemo(
-    () => [baseLayer, ...vectorLayers, busLayer, trainLayer, trainTrailLayer],
-    [baseLayer, vectorLayers, busLayer, trainLayer, trainTrailLayer],
+    () => [baseLayer, ...vectorLayers, busLayer],
+    [baseLayer, vectorLayers, busLayer],
   );
 
   const handleDropdownChange = (newValue: string) => {
     setSelectedOption(newValue);
+    setTrainStationsChecked(false);
     setShowMessage(true); // Show the message box when a new value is selected
     setTimeout(() => {
       setShowMessage(false); // Hide the message box after 3 seconds
@@ -138,12 +117,19 @@ function App() {
         destinationName: vehicleProperties.destinationName,
         occupancy: vehicleProperties.occupancy,
       };
-      // @ts-ignore
+
       setClickedFeature(clickedVehicle);
     } else {
       setClickedFeature(undefined);
     }
   }
+
+  useEffect(() => {
+    if (trainStationsChecked){
+      setSelectedOption("default");
+      busLayer.getSource()?.clear();
+    }
+  }, [trainStationsChecked]);
 
   useEffect(() => {
     map.setTarget(mapRef.current);
@@ -161,13 +147,15 @@ function App() {
     };
   }, [busLayer]);
 
-  useEffect(() => {
-    console.log(featuresWithinPolygon[0]?.getProperties());
-  }, [featuresWithinPolygon]);
+
 
   return (
     <MapContext.Provider
-      value={{ map, setBaseLayer, vectorLayers, setVectorLayers, drawingLayer }}
+      value={{map,
+        setBaseLayer,
+        vectorLayers,
+        setVectorLayers,
+        drawingLayer}}
     >
       <header>
         <div className={"applicationHeading"}>WillYouBeDelayed.com</div>
@@ -185,7 +173,7 @@ function App() {
             selectedValue={selectedOption}
             onChange={handleDropdownChange}
           />
-          <TrainStationsCheckbox />
+          <TrainStationsCheckbox checked={trainStationsChecked} setChecked={setTrainStationsChecked} />
         </nav>
       </header>
       <main>

@@ -42,3 +42,10 @@ export interface Vehicle {
 }
 
 export type VehicleFeatures = { getProperties(): Vehicle } & Feature<Point>;
+
+export type TrainstationProperties = {
+  navn: string;
+};
+export type TrainstationFeature = {
+  getProperties(): TrainstationProperties;
+} & Feature;

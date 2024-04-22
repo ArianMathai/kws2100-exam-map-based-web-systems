@@ -144,3 +144,6 @@ body {
   margin: 0;
   text-align: center;
 }
+.trainStationsCheckboxLabel {
+  color: white;
+}

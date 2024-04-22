@@ -6,61 +6,47 @@ import {
   useRef,
   useState,
 } from "react";
-import { Feature, MapBrowserEvent, Overlay } from "ol";
+import { MapBrowserEvent, Overlay } from "ol";
 import { MapContext } from "../context/MapContext";
 import VectorLayer from "ol/layer/Vector";
 import VectorSource from "ol/source/Vector";
 import { GeoJSON } from "ol/format";
 import React from "react";
 import { FeatureLike } from "ol/Feature";
-import { Circle, Fill, Stroke, Style } from "ol/style";
+import {trainstationStyle} from "../style/styles";
+import {useTrainData} from "./useTrainData";
+import {Cluster} from "ol/source";
+import {TrainstationFeature} from "./trainTypes";
+import {useBusData} from "../Busses/useBusData";
 
-type TrainstationProperties = {
-  navn: string;
-};
-type TrainstationFeature = {
-  getProperties(): TrainstationProperties;
-} & Feature;
-
-function trainstationStyle() {
-  return new Style({
-    image: new Circle({
-      stroke: new Stroke({ color: "white", width: 2 }),
-      fill: new Fill({ color: "rgb(5,116,129)" }),
-      radius: 5,
-    }),
-  });
-}
-const hoveredColor = "rgb(3,11,141)";
-function hoveredTrainstationStyle() {
-  return new Style({
-    image: new Circle({
-      stroke: new Stroke({ color: "white", width: 2 }),
-      fill: new Fill({ color: hoveredColor }),
-      radius: 8,
-    }),
-  });
-}
-function TrainStationsCheckbox() {
-  const { map, setVectorLayers } = useContext(MapContext);
-  const [checked, setChecked] = useState(false);
+function TrainStationsCheckbox({checked, setChecked} : {checked:boolean, setChecked: (checked: boolean) => void }) {
+  const { map, setVectorLayers, vectorLayers } = useContext(MapContext);
   const [hoveredTrainstation, setHoveredTrainstation] =
-    useState<TrainstationFeature>();
-  const [clickedFeature, setClickedFeature] = useState<
-    TrainstationFeature | undefined
-  >(undefined);
+    useState<TrainstationFeature | undefined>(undefined);
+
+  const {trainLayer, trainTrailLayer} = useTrainData();
 
   const overlay = useMemo(() => new Overlay({}), []);
   const overlayRef = useRef() as MutableRefObject<HTMLDivElement>;
 
+  const trainStationSource = new VectorSource({
+    url: "/kws-exam-2024/Jernbanestasjoner.json",
+    format: new GeoJSON(),
+  })
+
+  const clusterSource = new Cluster({
+    source:trainStationSource,
+    distance: 30,
+    minDistance: 10
+
+  })
+
   const trainstationLayer = new VectorLayer({
     className: "trainstationLayer",
-    source: new VectorSource({
-      url: "/kws-exam-2024/Jernbanestasjoner.json",
-      format: new GeoJSON(),
-    }),
+    source: clusterSource,
     style: trainstationStyle,
   });
+
 
   function handlePointerMove(e: MapBrowserEvent<PointerEvent>) {
     const features: FeatureLike[] = [];
@@ -71,12 +57,15 @@ function TrainStationsCheckbox() {
 
     if (features.length === 1) {
       const hoveredFeature = features[0] as TrainstationFeature;
-      setHoveredTrainstation(hoveredFeature);
-      setClickedFeature(hoveredFeature);
-      overlay.setPosition(e.coordinate);
+
+      if (hoveredFeature.get('features').length === 1) {
+        const clusterFeatures = hoveredFeature.get('features');
+        setHoveredTrainstation(clusterFeatures[0]);
+        overlay.setPosition(e.coordinate);
+      }
+
     } else {
       setHoveredTrainstation(undefined);
-      setClickedFeature(undefined);
       overlay.setPosition(undefined);
     }
   }
@@ -89,34 +78,35 @@ function TrainStationsCheckbox() {
       map.removeOverlay(overlay);
     };
   }, []);
-  useEffect(() => {
-    hoveredTrainstation?.setStyle(hoveredTrainstationStyle());
-    return () => hoveredTrainstation?.setStyle(undefined);
-  }, [hoveredTrainstation]);
+
 
   useEffect(() => {
-    if (checked) {
-      setVectorLayers((old) => [...old, trainstationLayer]);
+    if (checked && trainLayer && trainTrailLayer) {
+      setVectorLayers((old) => [...old, trainstationLayer, trainLayer, trainTrailLayer]);
       map.on("pointermove", handlePointerMove);
     }
     return () => {
-      setVectorLayers((old) => old.filter((old) => old != trainstationLayer));
+      setVectorLayers((old) =>
+          old.filter((layer) => layer !== trainLayer && layer !== trainTrailLayer && layer !== trainstationLayer)
+      );
       map.un("pointermove", handlePointerMove);
     };
-  }, [checked]);
+  }, [checked, trainLayer, trainTrailLayer]);
+
+
 
   return (
     <div>
-      <label>
+      <label className="trainStationsCheckboxLabel">
         <input
           type="checkbox"
           checked={checked}
           onChange={(e) => setChecked(e.target.checked)}
         />
-        {!checked ? "Vis" : "Skjul"} Togstasjoner
+        {!checked ? "Show" : "Hide"} Trains and train stations
       </label>
       <div ref={overlayRef} className={"overlay"}>
-        <p>Togstasjon: {clickedFeature?.getProperties().navn}</p>
+        <p>Train station: {hoveredTrainstation?.getProperties().navn}</p>
       </div>
     </div>
   );
