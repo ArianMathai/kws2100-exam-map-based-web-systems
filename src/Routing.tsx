@@ -179,13 +179,17 @@ function Routing() {
   const closeBox = () => {
     setDuration(null);
     setDistance(null);
+    setRoute([]);
     drawingLayer.getSource()?.clear();
+    setOrigin(undefined);
+    setDestination(undefined);
   };
 
   return (
     <>
-      <button onClick={handleClick}>
-        Calculate route{" "}
+      <div>
+        <button onClick={handleClick}>Click to Draw Route</button>
+
         <select
           className={"baseLayer_select"}
           value={selectedOption}
@@ -197,7 +201,7 @@ function Routing() {
             </option>
           ))}
         </select>
-      </button>
+      </div>
 
       {distance && duration ? (
         <div className={"clickedFeature"}>
