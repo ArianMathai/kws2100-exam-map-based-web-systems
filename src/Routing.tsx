@@ -9,6 +9,7 @@ import {Feature} from "ol";
 import {Stroke, Style} from "ol/style";
 import {getMinutes} from "./getMinutes";
 
+
 function Routing(){
 
     const { map, setVectorLayers, drawingLayer } = useContext(MapContext);
@@ -79,6 +80,7 @@ function Routing(){
             const data = await response.json();
             // Parse the route data
             const route = data.routes[0];
+            console.log("data routes = ", data.routes[0])
             const distance = route.distance; // Distance in meters
             const duration = route.duration; // Duration in seconds
             const geometry = route.geometry; // Route geometry (e.g., polyline)
@@ -87,7 +89,21 @@ function Routing(){
             console.log('Duration:', duration, 'seconds');
             console.log('Route Geometry:', geometry.coordinates);
             setDistance(Math.round(distance / 1000)); // In km
-            setDuration(Math.round(duration / 60)); // In min
+
+            // Not the best fix for durations by foot and cycle, but it gives a rough estimate
+            switch(selectedOption) {
+                case "driving":
+                    setDuration(Math.round(duration / 60)); // In min
+                    break;
+                case "walking":
+                    setDuration(Math.round((duration * 10) / 60)); // In min
+                    break;
+                case "cycling":
+                    setDuration(Math.round((duration * 3 ) / 60)); // In min
+                    break;
+                default:
+                    break;
+            }
             setRoute(geometry.coordinates);
         } catch (error) {
             console.error('Error fetching route data:', error);
@@ -166,14 +182,6 @@ function Routing(){
             fetchRoute();
         }
     }, [requestUrl]);
-    /*
-    useEffect(() => {
-        console.log("distance after ", distance)
-        console.log("duration after ", duration)
-        console.log("selected option ", selectedOption)
-    }, [distance, duration, selectedOption]);
-
-     */
 
     useEffect(() => {
         console.log("Selected Option:", selectedOption);
