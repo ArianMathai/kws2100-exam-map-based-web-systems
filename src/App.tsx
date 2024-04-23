@@ -157,20 +157,22 @@ function App() {
       <header>
         <div className={"applicationHeading"}>WillYouBeDelayed.com</div>
         <nav>
+          <BaseLayerDropdown />
+          <FocusOnMeBtn />
+          <Dropdown
+              options={dropdownOptions}
+              selectedValue={selectedOption}
+              onChange={handleDropdownChange}
+          />
           <DrawPolygon
             vectorSource={busSource}
             setFeaturesWithinPolygon={setFeaturesWithinPolygon}
             setIsBoxOpen={setIsBoxOpen}
             setShowInfoMessage={setShowInfoMessage}
           />
-          <DrawTrainStationButton />
-          <FocusOnMeBtn />
-          <BaseLayerDropdown />
-          <Dropdown
-            options={dropdownOptions}
-            selectedValue={selectedOption}
-            onChange={handleDropdownChange}
-          />
+          {/*<DrawTrainStationButton />*/}
+
+
           <TrainStationsCheckbox
             checked={trainStationsChecked}
             setChecked={setTrainStationsChecked}
