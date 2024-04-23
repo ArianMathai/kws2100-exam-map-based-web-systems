@@ -160,9 +160,9 @@ function App() {
           <BaseLayerDropdown />
           <FocusOnMeBtn />
           <Dropdown
-              options={dropdownOptions}
-              selectedValue={selectedOption}
-              onChange={handleDropdownChange}
+            options={dropdownOptions}
+            selectedValue={selectedOption}
+            onChange={handleDropdownChange}
           />
           <DrawPolygon
             vectorSource={busSource}
@@ -172,12 +172,11 @@ function App() {
           />
           {/*<DrawTrainStationButton />*/}
 
-
           <TrainStationsCheckbox
             checked={trainStationsChecked}
             setChecked={setTrainStationsChecked}
           />
-          <Routing/>
+          <Routing />
         </nav>
       </header>
       <main>

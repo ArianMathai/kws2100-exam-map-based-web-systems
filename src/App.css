@@ -162,7 +162,6 @@ body {
 }
 
 .checkbox {
-
   width: 18px;
   height: 18px;
   border: 2px solid #3f3a3a;
@@ -185,10 +184,5 @@ body {
 
 .exit-btn:hover {
   color: #0056b3;
-  background-color: lightblue
+  background-color: lightblue;
 }
-
-
-
-
-

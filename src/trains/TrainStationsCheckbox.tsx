@@ -110,7 +110,7 @@ function TrainStationsCheckbox({
     <div>
       <label className="trainStationsCheckboxLabel">
         <input
-            className="checkbox"
+          className="checkbox"
           type="checkbox"
           checked={checked}
           onChange={(e) => setChecked(e.target.checked)}
