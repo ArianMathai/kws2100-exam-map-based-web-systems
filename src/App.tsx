@@ -22,6 +22,7 @@ import { FeatureLike } from "ol/Feature";
 import { Feature, MapBrowserEvent } from "ol";
 import FeaturesWithinPolygon from "./FeaturesWithinPolygon";
 import { getMinutes } from "./getMinutes";
+import Routing from "./Routing";
 
 const dropdownOptions = [
   { value: "default", label: "Choose Bus Company" },
@@ -156,24 +157,26 @@ function App() {
       <header>
         <div className={"applicationHeading"}>WillYouBeDelayed.com</div>
         <nav>
+          <BaseLayerDropdown />
+          <FocusOnMeBtn />
+          <Dropdown
+            options={dropdownOptions}
+            selectedValue={selectedOption}
+            onChange={handleDropdownChange}
+          />
           <DrawPolygon
             vectorSource={busSource}
             setFeaturesWithinPolygon={setFeaturesWithinPolygon}
             setIsBoxOpen={setIsBoxOpen}
             setShowInfoMessage={setShowInfoMessage}
           />
-          <DrawTrainStationButton />
-          <FocusOnMeBtn />
-          <BaseLayerDropdown />
-          <Dropdown
-            options={dropdownOptions}
-            selectedValue={selectedOption}
-            onChange={handleDropdownChange}
-          />
+          {/*<DrawTrainStationButton />*/}
+
           <TrainStationsCheckbox
             checked={trainStationsChecked}
             setChecked={setTrainStationsChecked}
           />
+          <Routing />
         </nav>
       </header>
       <main>

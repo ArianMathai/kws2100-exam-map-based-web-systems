@@ -43,8 +43,8 @@ nav {
 
 .clickedFeature {
   position: fixed;
-  top: 5em;
-  right: 2em;
+  top: 12%;
+  right: 3%;
   height: auto;
   z-index: 20;
   justify-content: center;
@@ -159,4 +159,30 @@ body {
   background-color: #fff;
   cursor: pointer;
   outline: none;
+}
+
+.checkbox {
+  width: 18px;
+  height: 18px;
+  border: 2px solid #3f3a3a;
+  border-radius: 4px;
+  outline: none;
+  cursor: pointer;
+}
+
+.checkbox:checked {
+  background-color: #007bff;
+}
+
+.exit-btn {
+  background-color: transparent;
+  border: none;
+  color: #007bff;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.exit-btn:hover {
+  color: #0056b3;
+  background-color: lightblue;
 }

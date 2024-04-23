@@ -110,11 +110,12 @@ function TrainStationsCheckbox({
     <div>
       <label className="trainStationsCheckboxLabel">
         <input
+          className="checkbox"
           type="checkbox"
           checked={checked}
           onChange={(e) => setChecked(e.target.checked)}
         />
-        {!checked ? "Show" : "Hide"} Trains and train stations
+        {!checked ? "Show" : "Hide"} Trains and stations
       </label>
       <div ref={overlayRef} className={"overlay"}>
         <p>Train station: {hoveredTrainstation?.getProperties().navn}</p>

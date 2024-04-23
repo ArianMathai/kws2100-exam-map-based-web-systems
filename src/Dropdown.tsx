@@ -15,7 +15,6 @@ interface DropdownProps {
 }
 
 function Dropdown({ options, selectedValue, onChange }: DropdownProps) {
-  // Handler for the select change event
   const handleChange = (event: ChangeEvent<HTMLSelectElement>) => {
     onChange(event.target.value);
   };
