@@ -238,9 +238,16 @@ function EuropeAside() {
     <>
       {!isAsideVisible ? (
         <button className="zoom-btn" onClick={handleZoomEnd}>
-          {countryName
-            ? "Welcome to " + countryName + "\r\n\r\n Click to\r\nsay goodbye!"
-            : "Go back!"}
+          {countryName ? (
+            <div>
+              Welcome to <br />
+              {countryName} <br />
+              <br />
+              Click to say goodbye!
+            </div>
+          ) : (
+            "Go back!"
+          )}
         </button>
       ) : (
         <aside

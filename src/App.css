@@ -26,11 +26,11 @@ nav {
     align-items: stretch;
   }
   padding: 0.25em;
-  padding-left: 1em;
-  padding-right: 1em;
+  padding-left: 0.5em;
+  padding-right: 0.5em;
   display: flex;
   flex-wrap: wrap;
-  gap: 0.25em 1.5em;
+  gap: 0.25em 0.4em;
   justify-content: space-between;
   align-items: center;
 }
