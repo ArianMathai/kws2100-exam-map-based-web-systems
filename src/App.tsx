@@ -74,7 +74,6 @@ function App() {
     undefined,
   );
 
-
   const allLayers = useMemo(
     () => [baseLayer, ...vectorLayers, busLayer],
     [baseLayer, vectorLayers, busLayer],
@@ -174,7 +173,7 @@ function App() {
             setShowInfoMessage={setShowInfoMessage}
           />
           {/*<DrawTrainStationButton />*/}
-          <EuropeLayerCheckbox/>
+          <EuropeLayerCheckbox />
           <TrainStationsCheckbox
             checked={trainStationsChecked}
             setChecked={setTrainStationsChecked}

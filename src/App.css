@@ -216,7 +216,6 @@ main {
   font-weight: bold;
   color: firebrick;
   font-size: larger;
-
 }
 
 .clickedCountryOl {
@@ -242,7 +241,7 @@ main {
   top: 1.5em;
 }
 
-.map .ol-custom-overviewmap:not(.ol-collapsed)  {
+.map .ol-custom-overviewmap:not(.ol-collapsed) {
   border: 1px solid black;
 }
 
@@ -255,7 +254,7 @@ main {
   border: 2px solid red;
 }
 
-.map .ol-custom-overviewmap:not(.ol-collapsed) button{
+.map .ol-custom-overviewmap:not(.ol-collapsed) button {
   bottom: auto;
   left: auto;
   right: 1px;
@@ -265,7 +264,3 @@ main {
   top: 170px;
   right: 0;
 }
-
-
-
-
