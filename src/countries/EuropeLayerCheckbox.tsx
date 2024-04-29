@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
 import VectorLayer from "ol/layer/Vector";
-
 import VectorSource from "ol/source/Vector";
 import { GeoJSON } from "ol/format";
 import { MapContext } from "../context/MapContext";
+
 
 function EuropeLayerCheckbox() {
   const { setVectorLayers } = useContext(MapContext);
@@ -27,6 +27,7 @@ function EuropeLayerCheckbox() {
   }, [checked]);
 
   return (
+      <>
     <div>
       <label className="checkboxLabel">
         <input
@@ -38,6 +39,7 @@ function EuropeLayerCheckbox() {
         {!checked ? "Show" : "Hide"} Europe
       </label>
     </div>
+      </>
   );
 }
 export default EuropeLayerCheckbox;

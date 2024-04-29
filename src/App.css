@@ -250,17 +250,10 @@ main {
   width: 300px;
 }
 
-.map .ol-custom-overviewmap .ol-overviewmap-box {
-  border: 2px solid red;
-}
-
 .map .ol-custom-overviewmap:not(.ol-collapsed) button {
   bottom: auto;
   left: auto;
   right: 1px;
   top: 1px;
 }
-.map .ol-rotate {
-  top: 170px;
-  right: 0;
-}
+

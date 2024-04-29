@@ -84,6 +84,7 @@ function EuropeAside() {
     undefined,
   );
 
+  const [countryName, setCountryName] = useState<string>();
   const overlay = useMemo(() => new Overlay({}), []);
   const olRef = useRef() as MutableRefObject<HTMLDivElement>;
 
@@ -166,8 +167,7 @@ function EuropeAside() {
         // Optionally, adjust the extent or set a default zoom level here
         return;
       }
-
-      console.log("Feature extent:", extent);
+      const countryName = feature.getProperties().name;
       setIsAsideVisible(false);
       const center: Array<number> | undefined = view.getCenter();
 
@@ -177,13 +177,13 @@ function EuropeAside() {
         sessionStorage.setItem("lat", center[0].toString());
         sessionStorage.setItem("long", center[1].toString());
       }
+      setCountryName(countryName);
 
       view.cancelAnimations();
       view.fit(extent, {
         duration: 1000,
         padding: [0, 0, 0, 0],
         maxZoom: view.getMaxZoom(),
-        // Optionally, you can add a minZoom constraint here
       });
     },
     [map],
@@ -206,17 +206,18 @@ function EuropeAside() {
       map.un("pointermove", handleHovereCountry);
     };
   }, [map, visibleFeatures]);
+  /*
   useEffect(() => {
     const handleMoveEnd = () => {
       handleZoomEnd();
     };
-
-    // Using type assertion to bypass the type checking
     map.getView().on("moveend" as any, handleMoveEnd);
     return () => {
       map.getView().un("moveend" as any, handleMoveEnd);
     };
   }, [map]);
+
+   */
 
   useEffect(() => {
     if (visibleFeatures) {
@@ -237,7 +238,7 @@ function EuropeAside() {
     <>
       {!isAsideVisible ? (
         <button className="zoom-btn" onClick={handleZoomEnd}>
-          Go back!
+          {countryName ? "Welcome to " + countryName + "\r\n\r\n Click to\r\nsay goodbye!" : "Go back!"}
         </button>
       ) : (
         <aside

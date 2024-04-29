@@ -35,4 +35,4 @@ You can click on a train station to display an overlay with train station inform
 
 1. Work in teams of 2 or 3:
 
-- We have been working as a duo and programming has been done has pair programming.
+- We have been working as a duo and programming has been done as pair programming.
