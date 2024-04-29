@@ -23,6 +23,8 @@ import { Feature, MapBrowserEvent } from "ol";
 import FeaturesWithinPolygon from "./FeaturesWithinPolygon";
 import { getMinutes } from "./getMinutes";
 import Routing from "./Routing";
+import EuropeLayerCheckbox from "./countries/EuropeLayerCheckbox";
+import EuropeAside from "./countries/EuropeAside";
 
 const dropdownOptions = [
   { value: "default", label: "Choose Bus Company" },
@@ -72,6 +74,7 @@ function App() {
     undefined,
   );
 
+
   const allLayers = useMemo(
     () => [baseLayer, ...vectorLayers, busLayer],
     [baseLayer, vectorLayers, busLayer],
@@ -94,7 +97,7 @@ function App() {
       hitTolerance: 10,
     });
 
-    console.log(features.length);
+    //console.log(features.length);
 
     if (features.length === 1) {
       const vehicleFeature = features[0] as FeatureLike;
@@ -171,7 +174,7 @@ function App() {
             setShowInfoMessage={setShowInfoMessage}
           />
           {/*<DrawTrainStationButton />*/}
-
+          <EuropeLayerCheckbox/>
           <TrainStationsCheckbox
             checked={trainStationsChecked}
             setChecked={setTrainStationsChecked}
@@ -185,7 +188,7 @@ function App() {
           setIsBoxOpen={setIsBoxOpen}
           isBoxOpen={isBoxOpen}
         />
-        <div ref={mapRef}></div>
+        <div className="map" id="map" ref={mapRef}></div>
         {clickedFeature ? (
           <div className={"clickedFeature"}>
             <div className={"clickedFeatureBox"}>
@@ -213,6 +216,7 @@ function App() {
             <p>If you choose bus company you can draw polygon around buses.</p>
           </div>
         )}
+        <EuropeAside />
       </main>
     </MapContext.Provider>
   );

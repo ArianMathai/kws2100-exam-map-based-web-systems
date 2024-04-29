@@ -108,7 +108,7 @@ function TrainStationsCheckbox({
 
   return (
     <div>
-      <label className="trainStationsCheckboxLabel">
+      <label className="checkboxLabel">
         <input
           className="checkbox"
           type="checkbox"

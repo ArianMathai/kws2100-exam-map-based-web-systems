@@ -10,14 +10,14 @@
   position: absolute;
   top: 10px;
   left: 10px;
-  background-color: rgba(255, 255, 255, 0.9); /* White with 90% opacity */
+  background-color: rgba(255, 255, 255, 0.9);
   padding: 10px;
   border-radius: 5px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Soft shadow */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .overlay p {
-  margin: 0; /* Remove default margin */
+  margin: 0;
   font-size: 16px;
 }
 nav {
@@ -146,7 +146,7 @@ body {
   margin: 0;
   text-align: center;
 }
-.trainStationsCheckboxLabel {
+.checkboxLabel {
   color: white;
 }
 
@@ -186,3 +186,86 @@ body {
   color: #0056b3;
   background-color: lightblue;
 }
+
+main {
+  background-color: lightblue;
+  display: grid;
+  grid-template-columns: 1fr auto;
+
+  aside {
+    display: grid;
+    grid-template-columns: 0;
+    overflow-x: clip;
+    overflow-y: auto;
+    max-height: calc(100dvh - 93px);
+    background-color: white;
+
+    li {
+      cursor: pointer;
+    }
+  }
+  aside.visible {
+    grid-template-columns: auto;
+  }
+  aside > * {
+    padding: 0.5rem;
+    min-width: 25ch;
+  }
+}
+.bold {
+  font-weight: bold;
+  color: firebrick;
+  font-size: larger;
+
+}
+
+.clickedCountryOl {
+  position: absolute;
+  background-color: rgba(255, 255, 255, 0.9);
+  border: 2px solid black;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  bottom: 10%;
+  left: 5%;
+}
+.clickedCountryOl p {
+  margin: 0;
+  font-size: 16px;
+}
+.map .ol-custom-overviewmap,
+.map .ol-custom-overviewmap.ol-uncollapsible {
+  bottom: auto;
+  left: auto;
+  right: 1.5em;
+  top: 1.5em;
+}
+
+.map .ol-custom-overviewmap:not(.ol-collapsed)  {
+  border: 1px solid black;
+}
+
+.map .ol-custom-overviewmap .ol-overviewmap-map {
+  border: none;
+  width: 300px;
+}
+
+.map .ol-custom-overviewmap .ol-overviewmap-box {
+  border: 2px solid red;
+}
+
+.map .ol-custom-overviewmap:not(.ol-collapsed) button{
+  bottom: auto;
+  left: auto;
+  right: 1px;
+  top: 1px;
+}
+.map .ol-rotate {
+  top: 170px;
+  right: 0;
+}
+
+
+
+
