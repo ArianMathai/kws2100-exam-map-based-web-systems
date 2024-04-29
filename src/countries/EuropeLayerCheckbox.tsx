@@ -4,7 +4,6 @@ import VectorSource from "ol/source/Vector";
 import { GeoJSON } from "ol/format";
 import { MapContext } from "../context/MapContext";
 
-
 function EuropeLayerCheckbox() {
   const { setVectorLayers } = useContext(MapContext);
   const [checked, setChecked] = useState(false);
@@ -27,19 +26,19 @@ function EuropeLayerCheckbox() {
   }, [checked]);
 
   return (
-      <>
-    <div>
-      <label className="checkboxLabel">
-        <input
-          className="checkbox"
-          type="checkbox"
-          checked={checked}
-          onChange={(e) => setChecked(e.target.checked)}
-        />
-        {!checked ? "Show" : "Hide"} Europe
-      </label>
-    </div>
-      </>
+    <>
+      <div>
+        <label className="checkboxLabel">
+          <input
+            className="checkbox"
+            type="checkbox"
+            checked={checked}
+            onChange={(e) => setChecked(e.target.checked)}
+          />
+          {!checked ? "Show" : "Hide"} Europe
+        </label>
+      </div>
+    </>
   );
 }
 export default EuropeLayerCheckbox;
