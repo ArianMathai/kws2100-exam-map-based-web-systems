@@ -7,7 +7,6 @@ import { MapContext } from "../context/MapContext";
 function CountriesLayerCheckbox() {
   const { setVectorLayers, checked, setChecked } = useContext(MapContext);
 
-
   const countriesLayer = new VectorLayer({
     className: "countriesLayer",
     source: new VectorSource({
