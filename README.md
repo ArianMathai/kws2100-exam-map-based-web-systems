@@ -20,7 +20,7 @@ We utilize 5 different data sources to display features:
 3. **European Countries**: We use GeoJSON to display European countries as polygons.
 
 4. **Routes**: OSRM endpoint is utilized to fetch routes based on coordinates provided by
-clicking on the map. The route is displayed on the map as a linestring.
+   clicking on the map. The route is displayed on the map as a linestring.
 
 5. **Train Stations**: GeoJSON is used to display train stations as points.
 
@@ -58,4 +58,3 @@ Both train and bus data are stored in session storage to persist during reloads.
 1. Work in Teams of 2 or 3:
 
    - For the most part, being a duo, we have been doing pair programming.
-
