@@ -5,8 +5,8 @@ import { GeoJSON } from "ol/format";
 import { MapContext } from "../context/MapContext";
 
 function CountriesLayerCheckbox() {
-  const { setVectorLayers } = useContext(MapContext);
-  const [checked, setChecked] = useState(false);
+  const { setVectorLayers, checked, setChecked } = useContext(MapContext);
+
 
   const countriesLayer = new VectorLayer({
     className: "countriesLayer",

@@ -76,7 +76,7 @@ const hoverStyle = new Style({
 function CountriesAside() {
   const { countriesLayer, features, visibleFeatures } = useCountryFeatures();
 
-  const { map } = useContext(MapContext);
+  const { map, checked } = useContext(MapContext);
 
   const [hoveredCountry, setHoveredCountry] = useState<CountryFeature>();
   const [isAsideVisible, setIsAsideVisible] = useState(true);
@@ -126,13 +126,11 @@ function CountriesAside() {
       const lat = parseFloat(latitude);
       const long = parseFloat(longitude);
       if (!isNaN(zoomLevel)) {
-        map.getView().setCenter([lat, long]);
-        map.getView().setZoom(zoomLevel);
+        map.getView().animate({ center: [lat, long], zoom: zoomLevel, duration: 1500 });
       }
     } else {
       console.warn("Stored zoom or center not found in sessionStorage.");
     }
-
     setIsAsideVisible(true);
   }
 
@@ -160,11 +158,11 @@ function CountriesAside() {
         return;
       }
 
-      // Check if the extent is too small and set a minimum size if necessary
-      const minSize = 0.1; // Adjust this value as needed
+
+      const minSize = 0.1;
       if (extent[2] - extent[0] < minSize || extent[3] - extent[1] < minSize) {
         console.warn("Extent is too small:", extent);
-        // Optionally, adjust the extent or set a default zoom level here
+
         return;
       }
       const countryName = feature.getProperties().name;
@@ -206,18 +204,6 @@ function CountriesAside() {
       map.un("pointermove", handleHovereCountry);
     };
   }, [map, visibleFeatures]);
-  /*
-  useEffect(() => {
-    const handleMoveEnd = () => {
-      handleZoomEnd();
-    };
-    map.getView().on("moveend" as any, handleMoveEnd);
-    return () => {
-      map.getView().un("moveend" as any, handleMoveEnd);
-    };
-  }, [map]);
-
-   */
 
   useEffect(() => {
     if (visibleFeatures) {
@@ -234,68 +220,66 @@ function CountriesAside() {
     return () => hoveredCountry?.setStyle(undefined);
   }, [hoveredCountry]);
 
+  useEffect(() => {
+    if (!checked){
+      setClickedCountry(undefined);
+    }
+  }, [checked]);
+
   return (
-    <>
-      {!isAsideVisible ? (
-        <button className="zoom-btn" onClick={handleZoomEnd}>
-          {countryName ? (
-            <div>
-              Welcome to <br />
-              {countryName} <br />
-              <br />
-              Click to say goodbye!
+      <>
+        {checked && (
+            !isAsideVisible ? (
+                <button className="zoom-btn" onClick={handleZoomEnd}>
+                  {countryName ? (
+                      <div>
+                        Welcome to <br />
+                        {countryName} <br />
+                        <br />
+                        Click to say goodbye!
+                      </div>
+                  ) : (
+                      "Go back!"
+                  )}
+                </button>
+            ) : (
+                <aside className={isAsideVisible && features?.length ? "visible" : "hidden"}>
+                  <div>
+                    <h3>Countries</h3>
+                    <ul>
+                      {visibleFeatures?.map((c) => (
+                          <li
+                              key={c.getProperties().name_id}
+                              className={c.getProperties().name === hoveredCountry?.getProperties().name ? "bold" : ""}
+                              onClick={() => zoomToFeature(c)}
+                              onMouseEnter={(e) => {
+                                const target = e.target as HTMLElement;
+                                target.style.color = "#0429B7FF";
+                                target.style.fontSize = "larger";
+                              }}
+                              onMouseLeave={(e) => {
+                                const target = e.target as HTMLElement;
+                                target.style.color = "";
+                                target.style.fontSize = "";
+                              }}
+                          >
+                            {c.getProperties().name}
+                          </li>
+                      ))}
+                    </ul>
+                  </div>
+                </aside>
+            )
+        )}
+        {clickedCountry && (
+            <div ref={olRef} className="clickedCountryOl">
+              <p>{clickedCountry.getProperties().name}</p>
+              <p>Estimated population: {clickedCountry.getProperties().pop_est}</p>
+              <p>Economic status: {clickedCountry.getProperties().economy.split(". ")[1]}</p>
+              <p>Income: {clickedCountry.getProperties().income_grp.split(". ")[1]}</p>
             </div>
-          ) : (
-            "Go back!"
-          )}
-        </button>
-      ) : (
-        <aside
-          className={isAsideVisible && features?.length ? "visible" : "hidden"}
-        >
-          <div>
-            <h3>Countries</h3>
-            <ul>
-              {visibleFeatures?.map((c) => (
-                <li
-                  key={c.getProperties().name_id}
-                  className={
-                    c.getProperties().name ===
-                    hoveredCountry?.getProperties().name
-                      ? "bold"
-                      : ""
-                  }
-                  onClick={() => zoomToFeature(c)}
-                  onMouseEnter={(e) => {
-                    const target = e.target as HTMLElement;
-                    target.style.color = "red"; // Change color on hover
-                  }}
-                  onMouseLeave={(e) => {
-                    const target = e.target as HTMLElement;
-                    target.style.color = ""; // Reset color on hover out
-                  }}
-                >
-                  {c.getProperties().name}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </aside>
-      )}
-      {clickedCountry ? (
-        <div ref={olRef} className={"clickedCountryOl"}>
-          <p>{clickedCountry?.getProperties().name}</p>
-          <p>Estimated population: {clickedCountry?.getProperties().pop_est}</p>
-          <p>
-            Economic status:{" "}
-            {clickedCountry?.getProperties().economy.split(". ")[1]}
-          </p>
-          <p>
-            Income: {clickedCountry?.getProperties().income_grp.split(". ")[1]}
-          </p>
-        </div>
-      ) : null}
-    </>
+        )}
+      </>
   );
 }
 
