@@ -22,9 +22,9 @@ import { FeatureLike } from "ol/Feature";
 import { Feature, MapBrowserEvent } from "ol";
 import FeaturesWithinPolygon from "./FeaturesWithinPolygon";
 import { getMinutes } from "./getMinutes";
-import Routing from "./Routing";
-import EuropeLayerCheckbox from "./countries/EuropeLayerCheckbox";
-import EuropeAside from "./countries/EuropeAside";
+import Routing from "./routing/Routing";
+import CountriesLayerCheckbox from "./countries/CountriesLayerCheckbox";
+import CountriesAside from "./countries/CountriesAside";
 
 const dropdownOptions = [
   { value: "default", label: "Choose Bus Company" },
@@ -173,7 +173,7 @@ function App() {
             setShowInfoMessage={setShowInfoMessage}
           />
           {/*<DrawTrainStationButton />*/}
-          <EuropeLayerCheckbox />
+          <CountriesLayerCheckbox />
           <TrainStationsCheckbox
             checked={trainStationsChecked}
             setChecked={setTrainStationsChecked}
@@ -215,7 +215,7 @@ function App() {
             <p>If you choose bus company you can draw polygon around buses.</p>
           </div>
         )}
-        <EuropeAside />
+        <CountriesAside />
       </main>
     </MapContext.Provider>
   );
