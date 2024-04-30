@@ -1,38 +1,61 @@
-## Exam: KWS2100 Geographical Information Systems for the Web
+# Exam: KWS2100 Geographical Information Systems for the Web
 
-For our final project in KWS2100, we've developed an application designed to
-inform users about transportation delays. Additionally, users can measure
-distances and estimate travel times for various modes of transport.
-While waiting for their transportation, they can also explore information
-about different European countries. Our thesis is that individuals interested
-in public transportation and being one time may also have an interest in exploring different countries.
+## Description
 
-### Solution and highlight
+For our final project in KWS2100, we've developed an application aimed at informing users about transportation delays.
+Additionally, users can measure distances and estimate travel times for various modes of transport, obtain an overview
+of trains in the southern part of Norway, and explore facts about different European countries while waiting for their
+transportation.
 
-#### Data Sources
+## Solution and Highlight
 
-We are using 5 different data sources to display features.
+### Data Sources
 
-1. We are fetching buses from entur.no using their GraphQL websocket. The buses
-   are being displayed as **points** on the map.
+We utilize 5 different data sources to display features:
 
-2. We are fetching trains from entur.no using their GraphQL websocket. Trains are being
-   displayed as **points** on the map.
+1. **Buses**: We fetch bus data from entur.no using their GraphQL websocket. Buses are displayed as points on the map.
 
-3. We are using GeoJSON to show european countries. The countries are shown
-   as **polygons**.
+2. **Trains**: Train data is fetched from entur.no using their GraphQL websocket and displayed as points on the map.
 
-4. We are using an endpoint from OSRM (Open Source Routing Machine) to fetch routes based
-   on coordinates provided by click on the map. The route is shown on the map as **linestring**.
+3. **European Countries**: We use GeoJSON to display European countries as polygons.
 
-5. We are using GeoJSON to show Train Stations. Train stations are showed as **points**.
+4. **Routes**: OSRM endpoint is utilized to fetch routes based on coordinates provided by
+clicking on the map. The route is displayed on the map as a linestring.
 
-#### Overlay
+5. **Train Stations**: GeoJSON is used to display train stations as points.
 
-You can click on a train station to display an overlay with train station information.
+### Overlay
 
-### Formal requirements:
+Clicking on a train station displays an overlay with train station information.
+Overlays are also used for European countries, which can be hovered over.
 
-1. Work in teams of 2 or 3:
+### Overview Map
 
-- We have been working as a duo and programming has been done as pair programming.
+An Overview map is added when the map is created within the context.
+
+### Displaying Moving Data
+
+Live data for buses and trains is shown, obtained from entur GraphQL websocket.
+Selecting a bus company sets up a new websocket using the bus company ticket.
+Trains are fetched on application load and can be viewed by checking "view trains and train-stations".
+Transportation status is indicated by color: "Red" for delayed and "green" for on time.
+
+### Display Cluster Vector
+
+Clusters are used to gather stations when zooming out. Each cluster indicates the number of stations gathered.
+Stations switch to being styled with an icon when zoomed in.
+
+### Draw Polygon on Map to Display Bus Information
+
+When buses are activated, a polygon can be drawn to mark buses and determine if they are delayed or not.
+
+### Session Storage
+
+Both train and bus data are stored in session storage to persist during reloads. Trains leave a trail behind them. Session storage is used to start with a clean slate if the tab is closed.
+
+## Formal Requirements
+
+1. Work in Teams of 2 or 3:
+
+   - For the most part, being a duo, we have been doing pair programming.
+
