@@ -13,6 +13,7 @@ import { LineString } from "ol/geom";
 import { Coordinate } from "ol/coordinate";
 import { Feature } from "ol";
 import { Stroke, Style } from "ol/style";
+import { fromLonLat, toLonLat } from "ol/proj";
 
 interface Step {
   maneuver: {
@@ -75,7 +76,8 @@ function Routing() {
       legs.forEach((leg: Leg) => {
         leg.steps.forEach((step: Step) => {
           const coords = step.maneuver.location;
-          coordinates.push(coords);
+          const coordsTransformed = fromLonLat(coords);
+          coordinates.push(coordsTransformed);
           totalDuration += step.duration;
           totalDistance += step.distance;
         });
@@ -105,8 +107,8 @@ function Routing() {
 
     if (lineGeometry) {
       coordinates = lineGeometry.getCoordinates();
-      setOrigin(coordinates[0]);
-      setDestination(coordinates[1]);
+      setOrigin(toLonLat(coordinates[0]));
+      setDestination(toLonLat(coordinates[1]));
     }
     map.removeInteraction(draw);
   }

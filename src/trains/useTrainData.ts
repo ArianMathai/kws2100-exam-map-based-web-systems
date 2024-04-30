@@ -6,6 +6,7 @@ import VectorSource, { VectorSourceEvent } from "ol/source/Vector";
 import { trainStyle } from "../style/styles";
 import VectorLayer from "ol/layer/Vector";
 import { Stroke, Style } from "ol/style";
+import { fromLonLat } from "ol/proj";
 
 export function useTrainData() {
   const [trainArray, setTrainArray] = useState<Train[] | []>(
@@ -111,7 +112,9 @@ export function useTrainData() {
     const features = trainArray.map((train) => {
       //console.log("Train: ", train)
       const feature = new Feature(
-        new Point([train.location.longitude, train.location.latitude]),
+        new Point(
+          fromLonLat([train.location.longitude, train.location.latitude]),
+        ),
       );
       feature.setStyle(trainStyle);
       feature.setProperties({

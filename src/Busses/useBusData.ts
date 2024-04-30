@@ -5,6 +5,7 @@ import { Vehicle } from "../trains/trainTypes";
 import VectorSource from "ol/source/Vector";
 import { busStyle } from "../style/styles";
 import VectorLayer from "ol/layer/Vector";
+import { fromLonLat } from "ol/proj";
 
 export function useBusData(busCompany: string) {
   const [busArray, setBusArray] = useState<Vehicle[] | []>(
@@ -116,7 +117,7 @@ export function useBusData(busCompany: string) {
   const busSource = useMemo(() => {
     const features = busArray.map((bus) => {
       const feature = new Feature(
-        new Point([bus.location.longitude, bus.location.latitude]),
+        new Point(fromLonLat([bus.location.longitude, bus.location.latitude])),
       );
       feature.setStyle(busStyle);
       feature.setProperties({

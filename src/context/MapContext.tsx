@@ -1,7 +1,7 @@
 import { Map, View } from "ol";
 import React, { Dispatch, SetStateAction } from "react";
 import { Layer } from "ol/layer";
-import { useGeographic } from "ol/proj";
+import { fromLonLat, useGeographic } from "ol/proj";
 import { Feature } from "ol/render/webgl/MixedGeometryBatch";
 import VectorLayer from "ol/layer/Vector";
 import VectorSource from "ol/source/Vector";
@@ -13,8 +13,6 @@ import {
   defaults as defaultInteractions,
 } from "ol/interaction.js";
 
-useGeographic();
-
 const overviewMapControl = new OverviewMap({
   className: "ol-overviewmap ol-custom-overviewmap",
   layers: [
@@ -25,7 +23,6 @@ const overviewMapControl = new OverviewMap({
     }),
   ],
   view: new View({
-    projection: "EPSG:3857",
     center: [10, 59],
     zoom: 8,
   }),
@@ -37,9 +34,7 @@ export const map = new Map({
   interactions: defaultInteractions().extend([new DragRotateAndZoom()]),
   target: "map",
   view: new View({
-    projection: "EPSG:3857",
-    //projection: "EPSG:4326",
-    center: [10, 59],
+    center: fromLonLat([10, 59]),
     zoom: 8,
   }),
 });
