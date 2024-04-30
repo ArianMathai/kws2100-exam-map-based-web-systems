@@ -25,7 +25,7 @@ const overviewMapControl = new OverviewMap({
     }),
   ],
   view: new View({
-    projection: 'EPSG:4326',
+    projection: "EPSG:4326",
     center: [10, 59],
     zoom: 8,
   }),
@@ -38,7 +38,7 @@ export const map = new Map({
   target: "map",
   view: new View({
     //projection: 'EPSG:3857',
-    projection: 'EPSG:4326',
+    projection: "EPSG:4326",
     center: [10, 59],
     zoom: 8,
   }),

@@ -21,7 +21,9 @@ function CountriesLayerCheckbox() {
       setVectorLayers((old) => [...old, countriesLayer]);
     }
     return () => {
-      setVectorLayers((layers) => layers.filter((old) => old != countriesLayer));
+      setVectorLayers((layers) =>
+        layers.filter((old) => old != countriesLayer),
+      );
     };
   }, [checked]);
 

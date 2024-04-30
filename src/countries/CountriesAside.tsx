@@ -283,18 +283,17 @@ function CountriesAside() {
         </aside>
       )}
       {clickedCountry ? (
-          <div ref={olRef} className={"clickedCountryOl"}>
-            <p>{clickedCountry?.getProperties().name}</p>
-            <p>Estimated population: {clickedCountry?.getProperties().pop_est}</p>
-            <p>
-              Economic status:{" "}
-              {clickedCountry?.getProperties().economy.split(". ")[1]}
-            </p>
-            <p>
-              Income:{" "}
-              {clickedCountry?.getProperties().income_grp.split(". ")[1]}
-            </p>
-          </div>
+        <div ref={olRef} className={"clickedCountryOl"}>
+          <p>{clickedCountry?.getProperties().name}</p>
+          <p>Estimated population: {clickedCountry?.getProperties().pop_est}</p>
+          <p>
+            Economic status:{" "}
+            {clickedCountry?.getProperties().economy.split(". ")[1]}
+          </p>
+          <p>
+            Income: {clickedCountry?.getProperties().income_grp.split(". ")[1]}
+          </p>
+        </div>
       ) : null}
     </>
   );
