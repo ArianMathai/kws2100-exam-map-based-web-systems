@@ -221,14 +221,14 @@ main {
 
 .clickedCountryOl {
   position: absolute;
-  background-color: rgba(255, 255, 255, 0.9);
+  background-color: rgb(239, 230, 143);
   border: 2px solid black;
   padding: 10px;
   border-radius: 5px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   z-index: 1000;
-  bottom: 10%;
-  left: 20%;
+  bottom: 7%;
+  right: 20%;
 }
 .clickedCountryOl p {
   margin: 0;

@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { MapContext } from "../../context/MapContext";
+import { fromLonLat } from "ol/proj";
 function FocusOnMeBtn() {
   const { map } = useContext(MapContext);
 
@@ -18,7 +19,7 @@ function FocusOnMeBtn() {
     e.preventDefault();
     if (lat && long) {
       map.getView().animate({
-        center: [long, lat],
+        center: fromLonLat([long, lat]),
         zoom: 19,
       });
     }

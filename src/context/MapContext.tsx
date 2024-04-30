@@ -1,8 +1,7 @@
 import { Map, View } from "ol";
 import React, { Dispatch, SetStateAction } from "react";
 import { Layer } from "ol/layer";
-import { fromLonLat, useGeographic } from "ol/proj";
-import { Feature } from "ol/render/webgl/MixedGeometryBatch";
+import { fromLonLat } from "ol/proj";
 import VectorLayer from "ol/layer/Vector";
 import VectorSource from "ol/source/Vector";
 import { OverviewMap, defaults as defaultControls } from "ol/control.js";

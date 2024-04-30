@@ -21,7 +21,7 @@ import { OccupancyStatus, Vehicle } from "./trains/trainTypes";
 import { FeatureLike } from "ol/Feature";
 import { Feature, MapBrowserEvent } from "ol";
 import FeaturesWithinPolygon from "./FeaturesWithinPolygon";
-import { getMinutes } from "./getMinutes";
+import { getMinutes } from "./utils/getMinutes";
 import Routing from "./routing/Routing";
 import CountriesLayerCheckbox from "./countries/CountriesLayerCheckbox";
 import CountriesAside from "./countries/CountriesAside";
