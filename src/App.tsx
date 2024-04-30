@@ -73,6 +73,7 @@ function App() {
   const [clickedFeature, setClickedFeature] = useState<Vehicle | undefined>(
     undefined,
   );
+  const [checked, setChecked] = useState(false);
 
   const allLayers = useMemo(
     () => [baseLayer, ...vectorLayers, busLayer],
@@ -154,7 +155,15 @@ function App() {
 
   return (
     <MapContext.Provider
-      value={{ map, setBaseLayer, vectorLayers, setVectorLayers, drawingLayer }}
+      value={{
+        map,
+        setBaseLayer,
+        vectorLayers,
+        setVectorLayers,
+        drawingLayer,
+        checked,
+        setChecked,
+      }}
     >
       <header>
         <div className={"applicationHeading"}>WillYouBeDelayed.com</div>

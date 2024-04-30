@@ -25,7 +25,7 @@ const overviewMapControl = new OverviewMap({
     }),
   ],
   view: new View({
-    projection: "EPSG:4326",
+    projection: "EPSG:3857",
     center: [10, 59],
     zoom: 8,
   }),
@@ -37,8 +37,8 @@ export const map = new Map({
   interactions: defaultInteractions().extend([new DragRotateAndZoom()]),
   target: "map",
   view: new View({
-    //projection: 'EPSG:3857',
-    projection: "EPSG:4326",
+    projection: "EPSG:3857",
+    //projection: "EPSG:4326",
     center: [10, 59],
     zoom: 8,
   }),
@@ -53,10 +53,14 @@ export const MapContext = React.createContext<{
   vectorLayers: Layer[];
   setVectorLayers: Dispatch<SetStateAction<Layer[]>>;
   drawingLayer: VectorLayer<VectorSource>;
+  checked: boolean;
+  setChecked: Dispatch<SetStateAction<boolean>>;
 }>({
   map,
   setBaseLayer: () => {},
   vectorLayers: [],
   setVectorLayers: () => {},
   drawingLayer,
+  checked: false,
+  setChecked: () => {},
 });
