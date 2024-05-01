@@ -257,3 +257,19 @@ main {
   right: 1px;
   top: 1px;
 }
+
+.map .ol-custom-overviewmap .ol-overviewmap-box {
+  border: 2px solid green;
+  animation: pulse 1.5s infinite alternate;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1.3);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1.6);
+    opacity: 0.7;
+  }
+}

@@ -8,17 +8,18 @@ import VectorLayer from "ol/layer/Vector";
 import { fromLonLat } from "ol/proj";
 
 export function useBusData(busCompany: string) {
+  //Either empty array or fetched from session storage.
   const [busArray, setBusArray] = useState<Vehicle[] | []>(
     JSON.parse(sessionStorage.getItem("busArray") || "[]"),
   );
+
   const [webSocket, setWebSocket] = useState<WebSocket | undefined>(undefined);
 
   useEffect(() => {
-    sessionStorage.setItem("busArray", JSON.stringify(busArray));
+    sessionStorage.setItem("busArray", JSON.stringify(busArray)); //Filling session storage each time busArray changes.
   }, [busArray]);
 
   useEffect(() => {
-    // Close the existing WebSocket connection if it exists
     if (webSocket) {
       setBusArray([]);
       sessionStorage.setItem("busArray", JSON.stringify(busArray));
@@ -26,6 +27,7 @@ export function useBusData(busCompany: string) {
     }
 
     if (busCompany && busCompany != "default") {
+      //When Bus Company changes and its not default, then a new websocket should be created and Bus Array filled with new buses.
       setBusArray([]);
       sessionStorage.setItem("busArray", JSON.stringify(busArray));
       const connectWebSocket = () => {
@@ -92,7 +94,11 @@ export function useBusData(busCompany: string) {
           }
         };
 
-        ws.onclose = () => {};
+        ws.onclose = () => {
+          setTimeout(() => {
+            connectWebSocket();
+          }, 6000);
+        };
 
         ws.onerror = (error) => {
           console.error("WebSocket error:", error);
@@ -102,11 +108,9 @@ export function useBusData(busCompany: string) {
         setWebSocket(ws);
       };
 
-      // Initialize the WebSocket connection
       connectWebSocket();
     }
 
-    // Cleanup function to close the WebSocket when the component unmounts or when busCompany changes
     return () => {
       if (webSocket) {
         webSocket.close();
