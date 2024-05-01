@@ -1,5 +1,7 @@
 // Dropdown.tsx
 import React, { ChangeEvent } from "react";
+import { Simulate } from "react-dom/test-utils";
+import drop = Simulate.drop;
 
 // Define the shape of the option object
 interface DropdownOption {
@@ -9,12 +11,30 @@ interface DropdownOption {
 
 // Define the props for the Dropdown component
 interface DropdownProps {
-  options: DropdownOption[];
   selectedValue: string;
   onChange: (value: string) => void;
 }
 
-function Dropdown({ options, selectedValue, onChange }: DropdownProps) {
+const dropdownOptions = [
+  { value: "default", label: "Choose Bus Company" },
+  { value: "VYX", label: "Vy Express" },
+  { value: "VOT", label: "Vestfold og Telemark" },
+  { value: "SKY", label: "Vestland (Skyss)" },
+  { value: "AKT", label: "Agder (AKT)" },
+  { value: "ATB", label: "Trøndelag (AtB)" },
+  { value: "BRA", label: "Viken (Brakar)" },
+  { value: "FIN", label: "Troms og Finnmark (Snelandia)" },
+  { value: "MOR", label: "Møre og Romsdal (Fram)" },
+  { value: "NOR", label: "Nordland fylkeskommune" },
+  { value: "NSB", label: "Vy" },
+  { value: "OST", label: "Viken (Østfold kollektivtrafikk)" },
+  { value: "SOF", label: "Vestland (Kringom)" },
+  { value: "TRO", label: "Troms og Finnmark (Troms fylkestrafikk)" },
+  { value: "VOT", label: "Vestfold og Telemark" },
+  { value: "VYX", label: "Vy Express" },
+];
+
+function Dropdown({ selectedValue, onChange }: DropdownProps) {
   const handleChange = (event: ChangeEvent<HTMLSelectElement>) => {
     onChange(event.target.value);
   };
@@ -25,7 +45,7 @@ function Dropdown({ options, selectedValue, onChange }: DropdownProps) {
       value={selectedValue}
       onChange={handleChange}
     >
-      {options.map((option, index) => (
+      {dropdownOptions.map((option, index) => (
         <option key={index} value={option.value}>
           {option.label}
         </option>

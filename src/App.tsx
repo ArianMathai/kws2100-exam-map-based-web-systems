@@ -18,31 +18,13 @@ import Dropdown from "./Dropdown";
 import { OccupancyStatus, Vehicle } from "./trains/trainTypes";
 import { FeatureLike } from "ol/Feature";
 import { Feature, MapBrowserEvent } from "ol";
-import FeaturesWithinPolygon from "./FeaturesWithinPolygon";
+import ShowFeaturesWithinPolygon from "./ShowFeaturesWithinPolygon";
 import { getMinutes } from "./utils/getMinutes";
 import Routing from "./routing/Routing";
 import CountriesLayerCheckbox from "./countries/CountriesLayerCheckbox";
 import CountriesAside from "./countries/CountriesAside";
 import overviewMapControl from "./overviewMap";
-
-const dropdownOptions = [
-  { value: "default", label: "Choose Bus Company" },
-  { value: "VYX", label: "Vy Express" },
-  { value: "VOT", label: "Vestfold og Telemark" },
-  { value: "SKY", label: "Vestland (Skyss)" },
-  { value: "AKT", label: "Agder (AKT)" },
-  { value: "ATB", label: "Trøndelag (AtB)" },
-  { value: "BRA", label: "Viken (Brakar)" },
-  { value: "FIN", label: "Troms og Finnmark (Snelandia)" },
-  { value: "MOR", label: "Møre og Romsdal (Fram)" },
-  { value: "NOR", label: "Nordland fylkeskommune" },
-  { value: "NSB", label: "Vy" },
-  { value: "OST", label: "Viken (Østfold kollektivtrafikk)" },
-  { value: "SOF", label: "Vestland (Kringom)" },
-  { value: "TRO", label: "Troms og Finnmark (Troms fylkestrafikk)" },
-  { value: "VOT", label: "Vestfold og Telemark" },
-  { value: "VYX", label: "Vy Express" },
-];
+import handleBusClick from "./Busses/handleBusClick";
 
 function App() {
   const [baseLayer, setBaseLayer] = useState<Layer>(
@@ -88,47 +70,6 @@ function App() {
     }, 4000);
   };
 
-  function handlePointerClick(e: MapBrowserEvent<PointerEvent>) {
-    const features: FeatureLike[] = [];
-
-    map.forEachFeatureAtPixel(e.pixel, (f) => features.push(f), {
-      layerFilter: (l) => l === busLayer,
-      hitTolerance: 10,
-    });
-
-    //console.log(features.length);
-
-    if (features.length === 1) {
-      const vehicleFeature = features[0] as FeatureLike;
-      const vehicleProperties = vehicleFeature.getProperties();
-      const clickedVehicle: {
-        lastUpdated: any;
-        delay: number;
-        line: any;
-        location: any;
-        vehicleId: any;
-        originName: string;
-        inCongestion: boolean;
-        destinationName: string;
-        occupancy: OccupancyStatus;
-      } = {
-        line: vehicleProperties.line,
-        vehicleId: vehicleProperties.vehicleId,
-        delay: vehicleProperties.delay,
-        lastUpdated: vehicleProperties.lastUpdated,
-        location: vehicleProperties.location,
-        originName: vehicleProperties.originName,
-        inCongestion: vehicleProperties.inCongestion,
-        destinationName: vehicleProperties.destinationName,
-        occupancy: vehicleProperties.occupancy,
-      };
-
-      setClickedFeature(clickedVehicle);
-    } else {
-      setClickedFeature(undefined);
-    }
-  }
-
   useEffect(() => {
     if (trainStationsChecked) {
       setSelectedOption("default");
@@ -146,11 +87,15 @@ function App() {
   }, [allLayers]);
 
   useEffect(() => {
-    if (busLayer) map.on("click", handlePointerClick);
+    if (busLayer) {
+      const clickHandler = (e: MapBrowserEvent<PointerEvent>) =>
+        handleBusClick({ e, setClickedFeature, busLayer });
+      map.on("click", clickHandler);
 
-    return () => {
-      map.un("click", handlePointerClick);
-    };
+      return () => {
+        map.un("click", clickHandler);
+      };
+    }
   }, [busLayer]);
 
   return (
@@ -171,7 +116,6 @@ function App() {
           <BaseLayerDropdown />
           <FocusOnMeBtn />
           <Dropdown
-            options={dropdownOptions}
             selectedValue={selectedOption}
             onChange={handleDropdownChange}
           />
@@ -191,7 +135,7 @@ function App() {
         </nav>
       </header>
       <main>
-        <FeaturesWithinPolygon
+        <ShowFeaturesWithinPolygon
           features={featuresWithinPolygon}
           setIsBoxOpen={setIsBoxOpen}
           isBoxOpen={isBoxOpen}
