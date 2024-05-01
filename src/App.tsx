@@ -7,11 +7,11 @@ import React, {
 } from "react";
 import TileLayer from "ol/layer/Tile";
 import { OSM } from "ol/source";
-import BaseLayerDropdown from "./header/select/BaseLayerDropdown";
+import BaseLayerDropdown from "./header/BaseLayerDropdown";
 import { drawingLayer, map, MapContext } from "./context/MapContext";
 import { Layer } from "ol/layer";
-import FocusOnMeBtn from "./header/button/FocusOnMeBtn";
-import DrawPolygon from "./header/button/DrawPolygon";
+import FocusOnMeBtn from "./header/FocusOnMeBtn";
+import DrawPolygon from "./header/DrawPolygon";
 import TrainStationsCheckbox from "./trains/TrainStationsCheckbox";
 import { useBusData } from "./Busses/useBusData";
 import Dropdown from "./Dropdown";

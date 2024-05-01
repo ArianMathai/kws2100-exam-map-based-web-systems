@@ -1,9 +1,8 @@
 import { useContext, useEffect, useMemo, useState } from "react";
-import { MapContext, drawingLayer } from "../../context/MapContext";
+import { MapContext, drawingLayer } from "../context/MapContext";
 import VectorSource, { VectorSourceEvent } from "ol/source/Vector";
 import { Draw } from "ol/interaction";
 import React from "react";
-import { circleStyling } from "../../style/styles";
 import { Geometry, Point, Polygon } from "ol/geom";
 import { Feature } from "ol";
 import { containsExtent } from "ol/extent";
@@ -25,6 +24,7 @@ function DrawPolygon({
   const [source, setSource] = useState<VectorSource | undefined>();
   const draw = useMemo(() => new Draw({ source, type: "Polygon" }), [source]);
 
+  //Draw polygon and highlight features within
   const handleDrawingPolygon = (e: VectorSourceEvent) => {
     const polygonFeature = e.feature;
     const polygonGeometry = polygonFeature?.getGeometry() as Polygon;
@@ -49,6 +49,7 @@ function DrawPolygon({
       setFeaturesWithinPolygon(featuresWithinPolygon);
       setIsBoxOpen(true);
     } else {
+      //Logic to handle if someone draws without catching any buses.
       setShowInfoMessage(true);
       setTimeout(() => {
         drawingLayer.getSource()?.clear(); // Set showInfoMessage to false after the timeout
@@ -74,7 +75,7 @@ function DrawPolygon({
     }
   }, []);
 
-  return <button onClick={handleClick}>Define Area to List Buses</button>;
+  return <button onClick={handleClick}>Draw an Area to List Buses</button>;
 }
 
 export default DrawPolygon;

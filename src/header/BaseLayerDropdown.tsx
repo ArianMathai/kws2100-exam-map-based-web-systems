@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import TileLayer from "ol/layer/Tile";
-import { OSM, StadiaMaps, WMTS } from "ol/source";
-import { MapContext } from "../../context/MapContext";
+import { OSM, WMTS } from "ol/source";
+import { MapContext } from "../context/MapContext";
 import { WMTSCapabilities } from "ol/format";
 import { optionsFromCapabilities } from "ol/source/WMTS";
 
@@ -43,9 +43,11 @@ const BaseLayerDropdown = () => {
       layer: ortoPhotoLayer,
     },
   ];
+
   const [selectedBaseLayer, setSelectedBaseLayer] = useState(
     baseLayerOptions[0],
   );
+
   const { setBaseLayer } = useContext(MapContext);
 
   useEffect(() => {

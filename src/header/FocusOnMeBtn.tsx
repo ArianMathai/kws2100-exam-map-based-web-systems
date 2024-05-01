@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { MapContext } from "../../context/MapContext";
+import { MapContext } from "../context/MapContext";
 import { fromLonLat } from "ol/proj";
 function FocusOnMeBtn() {
   const { map } = useContext(MapContext);
