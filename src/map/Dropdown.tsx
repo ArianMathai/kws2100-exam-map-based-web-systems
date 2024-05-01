@@ -1,7 +1,4 @@
-// Dropdown.tsx
 import React, { ChangeEvent } from "react";
-import { Simulate } from "react-dom/test-utils";
-import drop = Simulate.drop;
 
 // Define the shape of the option object
 interface DropdownOption {

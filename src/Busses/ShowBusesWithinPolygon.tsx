@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { Feature } from "ol";
-import { Vehicle } from "./trains/trainTypes";
-import { getMinutes } from "./utils/getMinutes";
-import { drawingLayer } from "./context/MapContext"; // Assuming types.ts contains the definition of Vehicle interface
+import { Vehicle } from "../trains/trainTypes";
+import { getMinutes } from "../utils/getMinutes";
+import { drawingLayer } from "../context/MapContext";
 
-function ShowFeaturesWithinPolygon({
+function ShowBusesWithinPolygon({
   features,
   isBoxOpen,
   setIsBoxOpen,
@@ -47,4 +47,4 @@ function ShowFeaturesWithinPolygon({
   );
 }
 
-export default ShowFeaturesWithinPolygon;
+export default ShowBusesWithinPolygon;

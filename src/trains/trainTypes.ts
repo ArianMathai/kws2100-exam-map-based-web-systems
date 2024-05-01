@@ -45,6 +45,7 @@ export type VehicleFeatures = { getProperties(): Vehicle } & Feature<Point>;
 
 export type TrainstationProperties = {
   navn: string;
+  distance?: number;
 };
 export type TrainstationFeature = {
   getProperties(): TrainstationProperties;

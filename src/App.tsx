@@ -14,17 +14,20 @@ import FocusOnMeBtn from "./header/FocusOnMeBtn";
 import DrawPolygon from "./header/DrawPolygon";
 import TrainStationsCheckbox from "./trains/TrainStationsCheckbox";
 import { useBusData } from "./Busses/useBusData";
-import Dropdown from "./Dropdown";
-import { OccupancyStatus, Vehicle } from "./trains/trainTypes";
-import { FeatureLike } from "ol/Feature";
+import Dropdown from "./map/Dropdown";
+import { TrainstationFeature, Vehicle } from "./trains/trainTypes";
 import { Feature, MapBrowserEvent } from "ol";
-import ShowFeaturesWithinPolygon from "./ShowFeaturesWithinPolygon";
-import { getMinutes } from "./utils/getMinutes";
+import ShowBusesWithinPolygon from "./Busses/ShowBusesWithinPolygon";
 import Routing from "./routing/Routing";
 import CountriesLayerCheckbox from "./countries/CountriesLayerCheckbox";
 import CountriesAside from "./countries/CountriesAside";
-import overviewMapControl from "./overviewMap";
+import overviewMapControl from "./map/overviewMap";
 import handleBusClick from "./Busses/handleBusClick";
+import InfoBoxBus from "./Busses/InfoBoxBus";
+import DrawCircle from "./header/DrawCircle";
+import VectorSource from "ol/source/Vector";
+import { GeoJSON } from "ol/format";
+import InfoBoxTrainStation from "./trains/InfoBoxTrainStation";
 
 function App() {
   const [baseLayer, setBaseLayer] = useState<Layer>(
@@ -42,6 +45,10 @@ function App() {
   const [trainStationsChecked, setTrainStationsChecked] = useState(false);
 
   const [selectedOption, setSelectedOption] = useState("");
+
+  const [featuresWithinCircle, setFeaturesWithinCircle] = useState<
+    Feature[] | []
+  >([]);
 
   const { busLayer, busSource } = useBusData(selectedOption);
 
@@ -72,8 +79,8 @@ function App() {
 
   useEffect(() => {
     if (trainStationsChecked) {
-      setSelectedOption("default");
-      busLayer.getSource()?.clear();
+      setSelectedOption("default"); //We won't either trains or buses to show. Therefore, we set it to default.
+      busLayer.getSource()?.clear(); //And clear layers.
     }
   }, [trainStationsChecked]);
 
@@ -98,6 +105,11 @@ function App() {
     }
   }, [busLayer]);
 
+  useEffect(() => {
+    console.log("Features within circle: ", featuresWithinCircle);
+  }, [featuresWithinCircle]);
+
+  // @ts-ignore
   return (
     <MapContext.Provider
       value={{
@@ -125,7 +137,11 @@ function App() {
             setIsBoxOpen={setIsBoxOpen}
             setShowInfoMessage={setShowInfoMessage}
           />
-          {/*<DrawTrainStationButton />*/}
+          <DrawCircle
+            trainStationChecked={trainStationsChecked}
+            setIsBoxOpen={setIsBoxOpen}
+            setFeatures={setFeaturesWithinCircle}
+          />
           <CountriesLayerCheckbox />
           <TrainStationsCheckbox
             checked={trainStationsChecked}
@@ -135,29 +151,18 @@ function App() {
         </nav>
       </header>
       <main>
-        <ShowFeaturesWithinPolygon
+        <ShowBusesWithinPolygon
           features={featuresWithinPolygon}
           setIsBoxOpen={setIsBoxOpen}
           isBoxOpen={isBoxOpen}
         />
-        <div className="map" id="map" ref={mapRef}></div>
-        {clickedFeature ? (
-          <div className={"clickedFeature"}>
-            <div className={"clickedFeatureBox"}>
-              <p>From: {clickedFeature.originName}</p>
-              <p>To: {clickedFeature.destinationName}</p>
-              <p>
-                Delay?{" "}
-                {clickedFeature.delay > 0
-                  ? `Yes, ${getMinutes(clickedFeature.delay)} minutes`
-                  : clickedFeature.delay === 0
-                    ? "No. Right on time"
-                    : `No. Ahead of schedule with ${getMinutes(clickedFeature.delay)} minutes`}
-              </p>
-              <p>In Congestion? {clickedFeature.inCongestion ? "Yes" : "No"}</p>
-            </div>
-          </div>
-        ) : null}
+        <div className="map" ref={mapRef}></div>
+        <InfoBoxBus clickedFeature={clickedFeature} />
+        <InfoBoxTrainStation
+          isBoxOpen={isBoxOpen}
+          setIsBoxOpen={setIsBoxOpen}
+          featuresWithinDistance={featuresWithinCircle}
+        />
         {showMessage && (
           <div className={"showInfo"}>
             <p>You can click on buses to see if they are delayed.</p>

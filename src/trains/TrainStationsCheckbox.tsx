@@ -6,7 +6,7 @@ import {
   useRef,
   useState,
 } from "react";
-import { MapBrowserEvent, Overlay } from "ol";
+import { Feature, MapBrowserEvent, Overlay } from "ol";
 import { MapContext } from "../context/MapContext";
 import VectorLayer from "ol/layer/Vector";
 import VectorSource from "ol/source/Vector";
@@ -18,6 +18,7 @@ import { useTrainData } from "./useTrainData";
 import { Cluster } from "ol/source";
 import { TrainstationFeature } from "./trainTypes";
 import { useBusData } from "../Busses/useBusData";
+import { Geometry } from "ol/geom";
 
 function TrainStationsCheckbox({
   checked,

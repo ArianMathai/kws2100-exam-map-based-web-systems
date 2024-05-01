@@ -1,7 +1,7 @@
 import { MapBrowserEvent } from "ol";
 import { FeatureLike } from "ol/Feature";
 import { map } from "../context/MapContext";
-import { OccupancyStatus, Vehicle } from "../trains/trainTypes";
+import { Vehicle } from "../trains/trainTypes";
 import VectorLayer from "ol/layer/Vector";
 import VectorSource from "ol/source/Vector";
 
@@ -16,7 +16,6 @@ function handleBusClick({
   setClickedFeature,
   busLayer,
 }: HandleBusClickParams) {
-  console.log("Wihthin here");
   const features: FeatureLike[] = [];
 
   map.forEachFeatureAtPixel(e.pixel, (f) => features.push(f), {
