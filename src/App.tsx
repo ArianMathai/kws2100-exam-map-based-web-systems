@@ -23,6 +23,7 @@ import { getMinutes } from "./utils/getMinutes";
 import Routing from "./routing/Routing";
 import CountriesLayerCheckbox from "./countries/CountriesLayerCheckbox";
 import CountriesAside from "./countries/CountriesAside";
+import overviewMapControl from "./overviewMap";
 
 const dropdownOptions = [
   { value: "default", label: "Choose Bus Company" },
@@ -137,6 +138,7 @@ function App() {
 
   useEffect(() => {
     map.setTarget(mapRef.current);
+    map.addControl(overviewMapControl);
   }, []);
 
   useEffect(() => {
