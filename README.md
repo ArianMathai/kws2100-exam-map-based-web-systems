@@ -1,6 +1,6 @@
 # Exam: KWS2100 Geographical Information Systems for the Web
 
-Webiste: https://arianmathai.github.io/kws-exam-2024/
+Webiste: https://kristiania-kws2100-2024.github.io/kws2100-exam-ArianMathai/
 
 ## Description
 
