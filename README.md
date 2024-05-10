@@ -54,9 +54,3 @@ When buses are activated, a polygon can be drawn to mark buses and determine if 
 ### Session Storage
 
 Both train and bus data are stored in session storage to persist during reloads. Trains leave a trail behind them. Session storage is used to start with a clean slate if the tab is closed.
-
-## Formal Requirements
-
-1. Work in Teams of 2 or 3:
-
-   - For the most part, being a duo, we have been doing pair programming.
