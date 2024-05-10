@@ -1,5 +1,7 @@
 # Exam: KWS2100 Geographical Information Systems for the Web
 
+Webiste: https://arianmathai.github.io/kws-exam-2024/
+
 ## Description
 
 For our final project in KWS2100, we've developed an application aimed at informing users about transportation delays.
