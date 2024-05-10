@@ -6,7 +6,7 @@ Webiste: https://kristiania-kws2100-2024.github.io/kws2100-exam-ArianMathai/
 
 For our final project in KWS2100, we've developed an application aimed at informing users about transportation delays.
 Additionally, users can measure distances and estimate travel times for various modes of transport, obtain an overview
-of trains in the southern part of Norway, and explore facts about different European countries while waiting for their
+of trains in the southern part of Norway, and explore facts about different countries around the world while waiting for their
 transportation.
 
 ## Solution and Highlight
